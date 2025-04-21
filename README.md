@@ -2,7 +2,7 @@
 
 # 🤖 AI-Driven Healthcare Chatbot
 
-An intelligent, conversational chatbot designed to assist patients with health-related queries, symptom checking, appointment scheduling, and more — using AI and natural language processing (NLP).
+An intelligent, conversational chatbot designed to assist patients with health-related queries, symptom checking, appointment scheduling, and more — using AI and natural language processing (NLP). Adding a Chatbot + Facial Recognition + an SaaS service + extra (mobile application)
 
 ---
 
@@ -39,7 +39,6 @@ The **AI-Driven Healthcare Chatbot** is built to provide accessible, fast, and r
 | Firebase / DynamoDB or PostgreSQL | Optional data persistence |
 | FastAPI / Express.js | API services |
 | OAuth / JWT | Authentication & security |
-| If we got the time, we will add Flutter and Java/Kotlin for mobile applications | And add a SaaS!!!
 
 ---
 
