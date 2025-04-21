@@ -1,5 +1,4 @@
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&pause=1000&width=435&lines=HygieiaChat)](https://git.io/typing-svg)
-
 # 🤖 AI-Driven Healthcare Chatbot
 
 An intelligent, conversational chatbot designed to assist patients with health-related queries, symptom checking, appointment scheduling, and more — using AI and natural language processing (NLP). Adding a Chatbot + Facial Recognition + an SaaS service + extra (mobile application)
