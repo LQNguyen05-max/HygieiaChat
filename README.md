@@ -34,10 +34,12 @@ The **AI-Driven Healthcare Chatbot** is built to provide accessible, fast, and r
 |------------|---------|
 | Python / Node.js | Backend logic & integration |
 | OpenAI / Dialogflow / Rasa | NLP & intent recognition |
-| React / Flutter | Frontend interface (web/mobile) |
-| Firebase / MongoDB | Optional data persistence |
+| NextJS / React UI| Frontend interface (web/mobile) |
+| UIs such as Tailwind, ShadCN, ChakraUI, Bootstrap, etc. |
+| Firebase / DynamoDB or PostgreSQL | Optional data persistence |
 | FastAPI / Express.js | API services |
 | OAuth / JWT | Authentication & security |
+| If we got the time, we will add Flutter and Java/Kotlin for mobile applications |
 
 ---
 
