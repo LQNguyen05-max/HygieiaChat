@@ -1,13 +1,15 @@
 import { useState } from "react";
 
+// This is the main page of your Next.js application for right now.
 export default function Home() {
+  // create state for the chat and the input
   const [chatLog, setChatLog] = useState([]);
   const [input, setInput] = useState("");
 
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input) return;
-
+    // user sending a message and set the chat log
     const userMessage = { sender: "user", message: input };
     const prevLog = [...chatLog, userMessage];
     setChatLog((prevLog) => {
@@ -23,7 +25,7 @@ export default function Home() {
     setChatLog([
       prevLog,
       userMessage,
-      { sender: "bot", message: "..." }, // Placeholder for AI response
+      { sender: "bot", message: "Bot is Typing..." },
     ]);
     setInput("");
 
@@ -36,8 +38,6 @@ export default function Home() {
       body: JSON.stringify({ message: input }),
     });
 
-    // try a random question reply:
-
     const data = await response.json();
     // use data.message if you are using the server
     setChatLog([...newLog, { user: "AI", message: data.message }]);
@@ -45,6 +45,7 @@ export default function Home() {
   };
 
   return (
+    // current display of the chatbot, we will move this to a component later!
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100">
       <div className="w-full max-w-2xl p-6 bg-white rounded shadow-md">
         <h1 className="text-2xl font-bold mb-4">🩺 AI Health Chatbot</h1>

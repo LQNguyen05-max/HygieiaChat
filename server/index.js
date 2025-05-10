@@ -1,6 +1,6 @@
 // api key
 require("dotenv").config();
-console.log("API Key:", process.env.OPENAI_API_KEY); // Check if the API key is loaded correctly
+// console.log("API Key:", process.env.OPENAI_API_KEY); // Check if the API key is loaded correctly
 
 const express = require("express");
 const cors = require("cors");
@@ -16,10 +16,14 @@ app.use(express.json());
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-// good thing we know the client is running
 app.get("/api/ask", (req, res) => {
-  res.json({ message: "Hello! How can I assist you today?" });
+  res.json({ message: "Hello from the server!" });
+});
+
+// logging requests to the console (might not need this in production rn)
+// Route to handle GET requests
+app.get("/", (req, res) => {
+  res.send("Hello! This is the server for the health assistance app.");
 });
 
 // Route to handle POST requests
@@ -43,9 +47,6 @@ app.post("/api/ask", async (req, res) => {
       .status(500)
       .json({ message: "An error occurred while processing your request." });
   }
-
-  //   const fakeReply =
-  //     "I am not a doctor, but I can help you with general health information. Please consult a healthcare professional for specific medical advice.";
 });
 
 // Start the server
