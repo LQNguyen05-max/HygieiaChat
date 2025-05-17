@@ -41,7 +41,6 @@ coverage/
 # Docker files (optional, if using docker)
 *.tar
 *.gz
-docker-compose.override.yml
 
 # Local database files (if using SQLite, MongoDB dumps, etc.)
 *.sqlite
