@@ -1,4 +1,7 @@
 import { useState } from "react";
+// import { useRouter } from "next/router";
+import MedicalChatbot from "../../components/MedicalChatbot";
+import InfoPanel from "../../components/InfoPanel";
 
 // This is the main page of your Next.js application for right now.
 export default function Home() {
@@ -9,6 +12,7 @@ export default function Home() {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input) return;
+
     // user sending a message and set the chat log
     const userMessage = { sender: "user", message: input };
     const prevLog = [...chatLog, userMessage];
@@ -45,38 +49,15 @@ export default function Home() {
   };
 
   return (
-    // current display of the chatbot, we will move this to a component later!
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100">
-      <div className="w-full max-w-2xl p-6 bg-white rounded shadow-md">
-        <h1 className="text-2xl font-bold mb-4">🩺 AI Health Chatbot</h1>
-
-        <div className="h-80 overflow-y-auto mb-4 border p-2 bg-gray-50">
-          {chatLog.map((entry, idx) => (
-            <div
-              key={idx}
-              className={entry.sender === "user" ? "text-right" : "text-left"}
-            >
-              <strong>{entry.sender === "user" ? "You" : "Bot"}:</strong>{" "}
-              {entry.message}
-            </div>
-          ))}
-        </div>
-
-        <form onSubmit={handleSend} className="flex">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask a health question..."
-            className="flex-grow p-2 border rounded-l"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 rounded-r"
-          >
-            Send
-          </button>
-        </form>
+    <div className="main-layout">
+      <InfoPanel />
+      <div className="medical-chatbot-container">
+        <MedicalChatbot
+          chatLog={chatLog}
+          input={input}
+          setInput={setInput}
+          handleSend={handleSend}
+        />
       </div>
     </div>
   );
