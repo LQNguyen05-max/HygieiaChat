@@ -6,10 +6,19 @@
 }
 
 /* Main Layout */
+
 .main-layout {
   display: flex;
   min-height: 100vh;
-  height: 100vh; 
+  width: 100%;
+  /* Remove max-height */
+}
+
+.app-container {
+  width: 100vw;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
 }
 
 .medical-chatbot-container {
@@ -19,6 +28,29 @@
   height: 100vh;
   min-width: 0;
   background: #f9fafb;
+}
+
+/* Reopen Info Panel */
+.reopen-info-panel {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  z-index: 100;
+  background: #fff;         /* Light green background */
+  color: #065f46;               /* Dark green text */
+  border: none;
+  border-radius: 9999px;        /* Fully rounded */
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.reopen-info-panel:hover {
+  background: #bbf7d0;          /* Slightly darker green on hover */
+  color: #047857;
+  transform: scale(1.05);
 }
 
 /* Info Panel */
@@ -35,9 +67,13 @@
   flex-shrink: 0;
 }
 
-.info-panel-icon {
-  display: block;
-  margin: 0 auto;
+.info-panel-logo {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.info-panel-logo:hover {
+  transform: scale(1.05);
 }
 
 .info-panel-header {
@@ -49,7 +85,7 @@
 }
 
 .info-panel-title {
-  font-size: 1.125rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #1f2937;
 }
@@ -75,7 +111,7 @@
 }
 
 .info-panel-section-title {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #374151;
   margin-bottom: 0.5rem;
@@ -97,7 +133,6 @@
 .info-panel-instruction-manual {
   text-align: left;
   font-weight: 600;
-  color: #1f2937;
   margin-bottom: 0.5rem;
 }
 
@@ -105,22 +140,23 @@
   text-align: left;
   font-size: 1.125rem;
   line-height: 1.5rem;
-  font-weight: 1000;
+  font-weight: 600;
   color: #1f2937;
   margin-bottom: 0.5rem;
 }
 
 /* text-sm text-gray-600 mb-2 */
 .instruction-manual-enter {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  color: #4b5563;
 }
 
 /* text-sm text-gray-600 */
 .instruction-manual-example-questions {
   font-size: 0.875rem;
   color: #1f2937;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 /* list-disc list-inside text-sm text-gray-600 */
 .example-list {
@@ -131,7 +167,12 @@
   margin: 0.5rem 0 0 0;
   padding: 0;
 }
-.example-list li:hover {
+
+.example-list ol {
+  margin-bottom: 0.5rem;
+}
+
+.example-list ol:hover {
   color: green;
   cursor: pointer;
 }
@@ -147,17 +188,20 @@
 
 /* text-sm text-gray-600 mb-2 */
 .info-panel-limitations-quotas {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: #4b5563;
+}
+
+.info-panel-limitations-quotas, br {
   margin-bottom: 0.5rem;
 }
 
 .info-panel-limitations-quotas-list {
   list-style-type: disc;
-  list-style-position: inside;
+  list-style-position: outside;
   font-size: 0.875rem;
   color: #4b5563;
-  margin: 0.5rem 0 0 0;
+  margin: 0 0 0 1.25em;
   padding: 0;
 }
 
@@ -171,7 +215,7 @@
   margin-top: 0.5rem;
 }
 .info-panel-disclaimer-text {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: #4b5563;
   margin-bottom: 0.5rem;
 }
@@ -187,7 +231,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
-  background: #f9fafb; /* Tailwind's bg-gray-50 */
+  background: #d1fae5; /* Tailwind's bg-gray-50 */
 }
 
 .medical-chatbot-inner {
@@ -273,19 +317,22 @@
 /* Input area */
 .medical-chatbot-input-area {
   padding: 1rem;
-  border-top: 1px solid #e5e7eb;
-  background: #fff;
+  border-top: 1px solid #fff;
+  background: #d1fae5;
 }
 .medical-chatbot-input-row {
   max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
   display: flex;
+  background: #fff;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 .medical-chatbot-textarea {
   flex: 1;
   resize: none;
-  border: 1px solid #d1d5db;
+  border: 1px solid black;
   border-radius: 0.5rem 0 0 0.5rem;
   padding: 0.75rem;
   outline: none;

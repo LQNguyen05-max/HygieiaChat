@@ -20,28 +20,4 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# OS-specific files
-.DS_Store
-Thumbs.db
 
-# Editor/IDE settings
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-
-# Testing coverage
-coverage/
-
-# System files
-*.pid
-*.seed
-*.pid.lock
-
-# Docker files (optional, if using docker)
-*.tar
-*.gz
-
-# Local database files (if using SQLite, MongoDB dumps, etc.)
-*.sqlite
-*.*

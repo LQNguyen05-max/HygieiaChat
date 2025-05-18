@@ -1,12 +1,18 @@
 import { AlignRight, LucideAlignRight, X } from "lucide-react";
 
 export default function InfoPanel({ onClose }) {
-    
     return (
         // This is the InfoPanel component that provides information about the chatbot
         <div className="info-panel">
             <div className="info-panel-header">
-                <h2 className="info-panel-title">About Us</h2>
+                {/* logo */}
+                <img src="hybot.png" 
+                alt="Hygieia Bot Logo" 
+                className="info-panel-logo"
+                style={{width: 40, height: 40}} 
+                // logo click to home page
+                onClick={() => window.location.href = "/"} />
+                <h2 className="info-panel-title">HygieiaBot</h2>
                 <button onClick={onClose} className="info-panel-close" >
                     <X size={24} />
                 </button>
@@ -14,7 +20,7 @@ export default function InfoPanel({ onClose }) {
             {/* Content Materials */}
             <div className="info-panel-content">
                 <section className="info-panel-section">
-                    <h3 className="info-panel-section-title">What is HygieiaBot?</h3>
+                    <h3 className="info-panel-section-title">ABOUT</h3>
                     <p className="text-sm text-gray-600">
                         HygieiaBot is an AI-powered chatbot designed to help you understand your own medical needs.
                     </p>
@@ -28,13 +34,13 @@ export default function InfoPanel({ onClose }) {
                         Simply type in your question related to health in the chat bot and press Enter. The HygieiaBot will provide you with information and resources.
                     </p>
                     <p className="instruction-manual-example-questions">
-                        Example Questions:
+                        EXAMPLE QUESTIONS:
                     </p>
                     <ul className="example-list">
-                        <li>What is the black plaque?</li>
-                        <li>Explain diabetes mellitus</li>
-                        <li>What causes migraines?</li>
-                        <li>Define arrhythmia</li>
+                        <ol>What is the black plaque?</ol>
+                        <ol>Explain diabetes mellitus</ol>
+                        <ol>What causes migraines?</ol>
+                        <ol>Define arrhythmia</ol>
                     </ul>
                 </section>
 
