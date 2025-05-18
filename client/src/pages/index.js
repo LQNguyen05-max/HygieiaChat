@@ -8,6 +8,7 @@ export default function Home() {
   // create state for the chat and the input
   const [chatLog, setChatLog] = useState([]);
   const [input, setInput] = useState("");
+  const [showInfoPanel, setShowInfoPanel] = useState(true);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -49,15 +50,25 @@ export default function Home() {
   };
 
   return (
-    <div className="main-layout">
-      <InfoPanel />
-      <div className="medical-chatbot-container">
-        <MedicalChatbot
-          chatLog={chatLog}
-          input={input}
-          setInput={setInput}
-          handleSend={handleSend}
-        />
+    <div className="app-container">
+      <div className="main-layout">
+        {showInfoPanel && <InfoPanel onClose={() => setShowInfoPanel(false)} />}
+        <div className="medical-chatbot-container">
+          <MedicalChatbot
+            chatLog={chatLog}
+            input={input}
+            setInput={setInput}
+            handleSend={handleSend}
+          />
+          {!showInfoPanel && (
+            <button
+              className="reopen-info-panel"
+              onClick={() => setShowInfoPanel(true)}
+            >
+              Show Info
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
