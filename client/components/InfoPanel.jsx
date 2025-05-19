@@ -1,6 +1,6 @@
 import { AlignRight, LucideAlignRight, X } from "lucide-react";
 
-export default function InfoPanel({ onClose }) {
+export default function InfoPanel({ onClose, setInput}) {
     return (
         // This is the InfoPanel component that provides information about the chatbot
         <div className="info-panel">
@@ -11,7 +11,7 @@ export default function InfoPanel({ onClose }) {
                 className="info-panel-logo"
                 style={{width: 40, height: 40}} 
                 // logo click to home page
-                onClick={() => window.location.href = "/"} />
+                onClick={() => window.location.href = "/home"} />
                 <h2 className="info-panel-title">HygieiaBot</h2>
                 <button onClick={onClose} className="info-panel-close" >
                     <X size={24} />
@@ -37,10 +37,10 @@ export default function InfoPanel({ onClose }) {
                         EXAMPLE QUESTIONS:
                     </p>
                     <ul className="example-list">
-                        <ol>What is the black plaque?</ol>
-                        <ol>Explain diabetes mellitus</ol>
-                        <ol>What causes migraines?</ol>
-                        <ol>Define arrhythmia</ol>
+                        <ol onClick={() => setInput("What is the black plague?")}>What is the black plague?</ol>
+                        <ol onClick={() => setInput("Explain diabetes mellitus.")}>Explain diabetes mellitus.</ol>
+                        <ol onClick={() => setInput("What causes migraines?")}>What causes migraines?</ol>
+                        <ol onClick={() => setInput("Define arrhythmia.")}>Define arrhythmia.</ol>
                     </ul>
                 </section>
 

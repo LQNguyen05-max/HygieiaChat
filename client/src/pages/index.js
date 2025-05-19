@@ -2,6 +2,7 @@ import { useState } from "react";
 // import { useRouter } from "next/router";
 import MedicalChatbot from "../../components/MedicalChatbot";
 import InfoPanel from "../../components/InfoPanel";
+import User from "../../components/User";
 
 // This is the main page of your Next.js application for right now.
 export default function Home() {
@@ -51,8 +52,11 @@ export default function Home() {
 
   return (
     <div className="app-container">
+      <div className="user" onClick={() => window.location.href="/user"}>
+        <User />
+      </div>
       <div className="main-layout">
-        {showInfoPanel && <InfoPanel onClose={() => setShowInfoPanel(false)} />}
+        {showInfoPanel && <InfoPanel onClose={() => setShowInfoPanel(false)} setInput={setInput} />}
         <div className="medical-chatbot-container">
           <MedicalChatbot
             chatLog={chatLog}
