@@ -55,8 +55,8 @@ The **AI-Driven Healthcare Chatbot** is built to provide accessible, fast, and r
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/ai-healthcare-chatbot.git
-cd ai-healthcare-chatbot
+git clone [https://github.com/your-username/HygieiaChat.git]
+cd HygieiaChat
 
 # Install dependencies
 npm install        # or pip install -r requirements.txt
