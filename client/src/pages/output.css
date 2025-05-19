@@ -386,18 +386,30 @@
   display: flex;
   min-height: 100vh;
   width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 .app-container {
-  width: 100vw;
+  position: flex;
+  width: 100%;
+  max-width: 100vw;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
 }
+.user {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .medical-chatbot-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  flex: 1 1 0%;
   min-width: 0;
   background: #f9fafb;
 }
@@ -422,7 +434,7 @@
   transform: scale(1.05);
 }
 .info-panel {
-  width: 350px;
+  width: 300px;
   min-width: 280px;
   max-width: 450px;
   height: 100vh;
@@ -517,10 +529,11 @@
 }
 .example-list ol {
   margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 .example-list ol:hover {
   color: green;
-  cursor: pointer;
 }
 .info-panel-limitations {
   font-size: 1.125rem;
@@ -558,7 +571,9 @@
 .medical-chatbot-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1 1 0%;
+  min-width: 0;
+  background: #f9fafb;
 }
 .medical-chatbot-messages {
   flex: 1;
@@ -648,6 +663,7 @@
 }
 .medical-chatbot-input-row {
   max-width: 48rem;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -663,7 +679,6 @@
   padding: 0.75rem;
   outline: none;
   min-height: 44px;
-  max-height: 120px;
   font-size: 1rem;
 }
 .medical-chatbot-textarea:focus {
@@ -691,6 +706,9 @@
   margin: 0.5rem auto 0 auto;
   font-size: 0.75rem;
   color: #6b7280;
+}
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 @property --tw-space-y-reverse {
   syntax: "*";

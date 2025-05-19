@@ -3,7 +3,7 @@ import { Send } from "lucide-react"
 
 // import { medicalKnowledgeBase } from "@/lib/medical-knowledge"
 
-export default function MedicalChatbot() {
+export default function MedicalChatbot({input, setInput, chatLog, handleSend}) {
   const [messages, setMessages] = useState([
     {
       id: "welcome",
@@ -12,7 +12,7 @@ export default function MedicalChatbot() {
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ])
-  const [input, setInput] = useState("")
+  // const [input, setInput] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
@@ -115,10 +115,10 @@ export default function MedicalChatbot() {
 
   // Auto-resize textarea as user types
   const handleTextareaChange = (e) => {
-    setInput(e.target.value)
-    e.target.style.height = "auto"
-    e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`
-  }
+  setInput(e.target.value);
+  e.target.style.height = "auto";
+  e.target.style.height = `${e.target.scrollHeight}px`;
+  };
 
   return (
     <div className="medical-chatbot-container">
