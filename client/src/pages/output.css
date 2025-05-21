@@ -178,6 +178,12 @@
   }
 }
 @layer utilities {
+  .absolute {
+    position: absolute;
+  }
+  .relative {
+    position: relative;
+  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
@@ -384,27 +390,20 @@
 }
 .main-layout {
   display: flex;
+  flex-direction: row;
   min-height: 100vh;
   width: 100%;
   flex: 1;
   min-width: 0;
 }
 .app-container {
-  position: flex;
+  position: relative;
   width: 100%;
   max-width: 100vw;
   margin: 0 auto;
   height: 100vh;
   display: flex;
-}
-.user {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
 .medical-chatbot-container {
   display: flex;
@@ -445,7 +444,22 @@
   overflow-y: auto;
   flex-shrink: 0;
 }
-.info-panel-logo {
+@media only screen and (max-width: 1280px) {
+  body {
+    font-size: 18px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 18px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+}
+.info-panel {
   cursor: pointer;
   transition: transform 0.15s;
 }
@@ -616,9 +630,13 @@
   font-size: 0.75rem;
   margin-top: 0.25rem;
   color: #60a5fa;
+  text-align: right;
+  display: block;
 }
 .medical-chatbot-message.bot .medical-chatbot-timestamp {
   color: #6b7280;
+  text-align: right;
+  display: block;
 }
 .medical-chatbot-typing {
   margin-bottom: 1rem;

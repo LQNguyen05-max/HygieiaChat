@@ -9,7 +9,7 @@ export default function InfoPanel({ onClose, setInput}) {
                 <img src="hybot.png" 
                 alt="Hygieia Bot Logo" 
                 className="info-panel-logo"
-                style={{width: 40, height: 40}} 
+                style={{width: 37, height: 45}} 
                 // logo click to home page
                 onClick={() => window.location.href = "/home"} />
                 <h2 className="info-panel-title">HygieiaBot</h2>
