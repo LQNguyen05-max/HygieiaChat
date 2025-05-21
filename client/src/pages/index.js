@@ -1,8 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 // import { useRouter } from "next/router";
 import MedicalChatbot from "../../components/MedicalChatbot";
 import InfoPanel from "../../components/InfoPanel";
-import User from "../../components/User";
+import UserProfile from "../../components/UserProfile";
+import { getCustomReply } from "../../util/customReply";
 
 // This is the main page of your Next.js application for right now.
 export default function Home() {
@@ -10,68 +11,94 @@ export default function Home() {
   const [chatLog, setChatLog] = useState([]);
   const [input, setInput] = useState("");
   const [showInfoPanel, setShowInfoPanel] = useState(true);
+  const [isBotTyping, setIsBotTyping] = useState(false);
 
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input) return;
 
-    // user sending a message and set the chat log
-    const userMessage = { sender: "user", message: input };
-    const prevLog = [...chatLog, userMessage];
-    setChatLog((prevLog) => {
-      const updateLog = [...prevLog];
-      updateLog[updateLog.length - 1] = { sender: "bot", message: "..." };
-      return updateLog;
+    // timestamp for each message
+    const now = new Date();
+    const timeString = now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
     });
 
-    const newLog = [...chatLog, userMessage];
-
+    // Add user message
+    const userMessage = {
+      sender: "user",
+      message: input,
+      timestamp: timeString,
+    };
+    setChatLog((prev) => [...prev, userMessage]);
     setInput("");
 
-    setChatLog([
-      prevLog,
-      userMessage,
-      { sender: "bot", message: "Bot is Typing..." },
-    ]);
-    setInput("");
+    // Check for custom replies
+    const customReply = getCustomReply(input);
+    if (customReply) {
+      setIsBotTyping(true);
+      setTimeout(() => {
+        const botMessage = {
+          sender: "bot",
+          message: customReply,
+          timestamp: timeString,
+        };
+        setChatLog((prev) => [...prev, botMessage]);
+        setIsBotTyping(false);
+      }, 1000);
+      return;
+    }
+    setIsBotTyping(true);
 
-    // send message to the serverwhere
-    const response = await fetch("http://localhost:5000/api/ask", {
+    // Sending message to user
+    const response = await fetch("http://localhost:5000/api/responses", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: input }),
     });
 
     const data = await response.json();
-    // use data.message if you are using the server
-    setChatLog([...newLog, { user: "AI", message: data.message }]);
-    setInput("");
+
+    // Updating Chatlog with the bot's responses
+    const botMessage = {
+      sender: "bot",
+      message: data.message,
+      timestamp: timeString,
+    };
+
+    setChatLog((prev) => [...prev, botMessage]);
+    setIsBotTyping(false);
   };
 
   return (
-    <div className="app-container">
-      <div className="user" onClick={() => window.location.href="/user"}>
-        <User />
-      </div>
-      <div className="main-layout">
-        {showInfoPanel && <InfoPanel onClose={() => setShowInfoPanel(false)} setInput={setInput} />}
-        <div className="medical-chatbot-container">
-          <MedicalChatbot
-            chatLog={chatLog}
-            input={input}
-            setInput={setInput}
-            handleSend={handleSend}
-          />
-          {!showInfoPanel && (
-            <button
-              className="reopen-info-panel"
-              onClick={() => setShowInfoPanel(true)}
-            >
-              Show Info
-            </button>
+    // returns the display of the chatbot
+    <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
+      <UserProfile />
+      <div className="app-container">
+        <div className="main-layout">
+          {showInfoPanel && (
+            <InfoPanel
+              onClose={() => setShowInfoPanel(false)}
+              setInput={setInput}
+            />
           )}
+          <div className="medical-chatbot-container">
+            <MedicalChatbot
+              chatLog={chatLog}
+              input={input}
+              setInput={setInput}
+              handleSend={handleSend}
+              isBotTyping={isBotTyping}
+            />
+            {!showInfoPanel && (
+              <button
+                className="reopen-info-panel"
+                onClick={() => setShowInfoPanel(true)}
+              >
+                Show Info
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
