@@ -2,7 +2,7 @@ import { AlignRight, LucideAlignRight, X } from "lucide-react";
 
 export default function InfoPanel({ onClose, setInput}) {
     return (
-        // This is the InfoPanel component that provides information about the chatbot
+        // Info Panel, on the left handle of the screen with a close button
         <div className="info-panel">
             <div className="info-panel-header">
                 {/* logo */}
@@ -17,7 +17,7 @@ export default function InfoPanel({ onClose, setInput}) {
                     <X size={24} />
                 </button>
             </div>
-            {/* Content Materials */}
+            {/* Info Panel Content */}
             <div className="info-panel-content">
                 <section className="info-panel-section">
                     <h3 className="info-panel-section-title">ABOUT</h3>
@@ -36,6 +36,7 @@ export default function InfoPanel({ onClose, setInput}) {
                     <p className="instruction-manual-example-questions">
                         EXAMPLE QUESTIONS:
                     </p>
+                    {/* Example Questions */}
                     <ul className="example-list">
                         <ol onClick={() => setInput("What is the black plague?")}>What is the black plague?</ol>
                         <ol onClick={() => setInput("Explain diabetes mellitus.")}>Explain diabetes mellitus.</ol>
@@ -43,7 +44,6 @@ export default function InfoPanel({ onClose, setInput}) {
                         <ol onClick={() => setInput("Define arrhythmia.")}>Define arrhythmia.</ol>
                     </ul>
                 </section>
-
                 <section>
                     <h3 className="info-panel-limitations">LIMITATIONS</h3>
                         <p className="info-panel-limitations-quotas">

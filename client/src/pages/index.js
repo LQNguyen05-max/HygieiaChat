@@ -69,7 +69,7 @@ export default function Home() {
     setChatLog((prev) => [...prev, botMessage]);
     setIsBotTyping(false);
   };
-
+  
   return (
     // returns the display of the chatbot
     <div style={{ position: "relative", height: "100vh", width: "100vw" }}>

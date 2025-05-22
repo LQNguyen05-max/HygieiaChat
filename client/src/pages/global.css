@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
-/* Test */
+/* Test
 .test-tailwind {
   @apply bg-red-500 text-white p-4;
-}
+} */
 
 /* Main Layout */
 .main-layout {
