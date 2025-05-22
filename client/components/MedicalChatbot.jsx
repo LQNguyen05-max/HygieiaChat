@@ -5,16 +5,17 @@ export default function MedicalChatbot({ input, setInput, chatLog, handleSend, i
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Auto-scroll to bottom when messages change
+  // Auto-scroll to the bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatLog]);
 
-  // Focus input on load
+  // Focus on the input field when component mounts
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
+  // Enter a key event to send the message
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -30,6 +31,7 @@ export default function MedicalChatbot({ input, setInput, chatLog, handleSend, i
   };
 
   return (
+    // Chatbot UI on the right hand side of the screen
     <div className="medical-chatbot-container">
       <div className="medical-chatbot-messages">
         <div className="medical-chatbot-inner">
