@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { CircleUser } from "lucide-react"; // or your preferred icon
+import { CircleUser } from "lucide-react";
 
 export default function UserProfile() {
   const [showProfile, setShowProfile] = useState(false);
-
+  // returning user profile component
   return (
     <div
       className="user-profile"
@@ -49,7 +49,7 @@ export default function UserProfile() {
             onClick={(e) => {
               e.stopPropagation();
               window.location.href = "/users"
-              // change later!!!
+              // change the logout by having it reroute to a different page instead of an alert later!!!
               alert("Log out");
             }}
           >

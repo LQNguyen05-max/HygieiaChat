@@ -12,6 +12,8 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [showInfoPanel, setShowInfoPanel] = useState(true);
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [deleteIndex, setDeleteIndex] = useState(null);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -24,6 +26,13 @@ export default function Home() {
       minute: "2-digit",
     });
 
+    if (editingIndex !== null) {
+      // Update the existing message
+      setChatLog((prev) =>
+        prev.filter((_, i) => i !== editingIndex && i !== editingIndex + 1)
+      );
+      setEditingIndex(null);
+    }
     // Add user message
     const userMessage = {
       sender: "user",
@@ -89,6 +98,10 @@ export default function Home() {
               setInput={setInput}
               handleSend={handleSend}
               isBotTyping={isBotTyping}
+              setChatLog={setChatLog}
+              setEditingIndex={setEditingIndex}
+              deleteIndex={deleteIndex}
+              setDeleteIndex={setDeleteIndex}
             />
             {!showInfoPanel && (
               <button
