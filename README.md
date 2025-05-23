@@ -1,8 +1,8 @@
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&pause=1000&width=435&lines=HygieiaChat)](https://git.io/typing-svg)
 
-# 🤖 AI-Driven Healthcare Chatbot
+# 🤖 AI Healthcare Chatbot
 
-An intelligent, conversational chatbot designed to assist patients with health-related queries, symptom checking, appointment scheduling, and more — using AI and natural language processing (NLP). Adding a Chatbot + Facial Recognition + an SaaS service + extra (mobile application)
+An intelligent, conversational chatbot designed to assist patients with health-related queries, symptom checking, appointment scheduling, and more — using AI and natural language processing (NLP). Adding a Chatbot + Facial Recognition + an SaaS service + mobile application
 
 ---
 
@@ -20,12 +20,12 @@ The **AI-Driven Healthcare Chatbot** is built to provide accessible, fast, and r
 
 ## ✨ Features
 
-- 💬 **Conversational Interface** – Natural and intuitive human-like dialogue
-- 🧠 **NLP-Powered Responses** – Uses machine learning models to understand user intent
-- ⚕️ **Symptom Checker** – Suggests possible conditions based on reported symptoms
-- 📅 **Appointment Scheduling** – Integrates with calendar APIs
-- 🔒 **Privacy-First Design** – Respects user confidentiality and stores no sensitive data by default
-- 🌐 **Multi-Platform Support** – Can be deployed on web, mobile, or messaging platforms (e.g., WhatsApp, Messenger)
+- 💬 **Conversational Interface** – Natural and intuitive human-like dialogue (check)
+- 🧠 **NLP-Powered Responses** – Uses machine learning models to understand user intent (almost)
+- ⚕️ **Symptom Checker** – Suggests possible conditions based on reported symptoms (check)
+- 📅 **Appointment Scheduling** – Integrates with calendar APIs (working on)
+- 🔒 **Privacy-First Design** – Respects user confidentiality and stores no sensitive data by default (working on)
+- 🌐 **Multi-Platform Support** – Can be deployed on web, mobile, or messaging platforms (e.g., WhatsApp, Messenger) (working on)
 
 ---
 
@@ -36,7 +36,7 @@ The **AI-Driven Healthcare Chatbot** is built to provide accessible, fast, and r
 | Python / Node.js                  | Backend logic & integration                             |
 | OpenAI                            | NLP & intent recognition                                |
 | NextJS / React UI                 | Frontend interface (web/mobile)                         |
-| CSS                               | UIs such as Tailwind, ShadCN, ChakraUI, Bootstrap, etc. |
+| CSS /                             | UIs such as Tailwind, ShadCN, ChakraUI, Bootstrap, etc. |
 | Firebase / DynamoDB or PostgreSQL | Optional data persistence                               |
 | FastAPI / Express.js              | API services                                            |
 | OAuth / JWT                       | Authentication & security                               |
