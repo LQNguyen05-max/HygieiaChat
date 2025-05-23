@@ -9,24 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "next": "^15.3.1",
-=======
     "lucide-react": "^0.511.0",
     "next": "15.3.1",
->>>>>>> f2ae50ac06d5ef646042fc6c24f175f22b36a4e0
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-<<<<<<< HEAD
-    "@tailwindcss/postcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.1",
-    "tailwindcss": "^4"
-  }
-=======
     "@tailwindcss/cli": "^4.1.7",
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
@@ -39,5 +28,4 @@
   "keywords": [],
   "author": "",
   "license": "ISC"
->>>>>>> f2ae50ac06d5ef646042fc6c24f175f22b36a4e0
 }
