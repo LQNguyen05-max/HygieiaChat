@@ -8,9 +8,10 @@ export default function MedicalChatbot({
   handleSend,
   isBotTyping,
   setChatLog,
+  editingIndex,
   setEditingIndex,
   deleteIndex,
-  setDeleteIndex
+  setDeleteIndex,
 }) {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -99,8 +100,14 @@ export default function MedicalChatbot({
                     }}
                     onClick={() => {
                       // setting to chatLog to edit the last message
-                      setInput(message.message);
-                      setEditingIndex(idx);
+                      if (editingIndex === idx) {
+                        // can close the edit mode
+                        setEditingIndex(null);
+                        setInput("");
+                      } else {
+                        setInput(message.message);
+                        setEditingIndex(idx);
+                      }
                     }}
                   >
                     <Pencil size={16} />
@@ -159,18 +166,32 @@ export default function MedicalChatbot({
             terms and is not a substitute for professional medical advice.
           </p>
         </div>
-      </div>    
+      </div>
       {/* Deletion Modal */}
       {deleteIndex !== null && (
         <div className="modal-overlay">
           <div className="modal-content">
             <strong>Delete Message</strong>
-            <p>Are you sure you want to delete this message? This action cannot be undone.</p>
-            <div style={{ marginTop: "1rem", display: "flex", gap: "1rem", justifyContent: "center" }}>
+            <p>
+              Are you sure you want to delete this message? This action cannot
+              be undone.
+            </p>
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                gap: "1rem",
+                justifyContent: "center",
+              }}
+            >
               <button
                 className="modal-btn modal-btn-danger"
                 onClick={() => {
-                  setChatLog(prev => prev.filter((_, i) => i !== deleteIndex && i !== deleteIndex + 1));
+                  setChatLog((prev) =>
+                    prev.filter(
+                      (_, i) => i !== deleteIndex && i !== deleteIndex + 1
+                    )
+                  );
                   setDeleteIndex(null);
                 }}
               >
@@ -186,8 +207,6 @@ export default function MedicalChatbot({
           </div>
         </div>
       )}
-
-
     </div>
   );
 }
