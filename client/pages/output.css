@@ -260,7 +260,7 @@
   background: #fff;
   color: #065f46;
   border: none;
-  border-radius: 9999px;
+  border-radius: 1rem;
   padding: 0.5rem 1.25rem;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
