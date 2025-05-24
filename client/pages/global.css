@@ -5,8 +5,6 @@
   @apply bg-red-500 text-white p-4;
 } */
 
-
-
 /* Main Layout */
 .main-layout {
   display: flex;
@@ -45,7 +43,7 @@
   background: #fff;         
   color: #065f46;               
   border: none;
-  border-radius: 9999px;        
+  border-radius: 1rem;        
   padding: 0.5rem 1.25rem;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
@@ -54,7 +52,7 @@
 }
 
 .reopen-info-panel:hover {
-  background: #bbf7d0;          /* Slightly darker green on hover */
+  background: #bbf7d0;         
   color: #047857;
   transform: scale(1.05);
 }

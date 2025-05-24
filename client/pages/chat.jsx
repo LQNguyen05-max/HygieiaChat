@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-// import { useRouter } from "next/router";
-import MedicalChatbot from "../../components/MedicalChatbot";
-import InfoPanel from "../../components/InfoPanel";
-import UserProfile from "../../components/UserProfile";
-import { getCustomReply } from "../../util/customReply";
+import MedicalChatbot from "../components/MedicalChatbot";
+import InfoPanel from "../components/InfoPanel";
+import UserProfile from "../components/UserProfile";
+import { getCustomReply } from "../util/customReply";
 
-// This is the main page of your Next.js application for right now.
-export default function Home() {
-  // create state for the chat and the input
+// POST request to the backend to route the Chatbot UI; acts like a router
+export default function Chat() {
   const [chatLog, setChatLog] = useState([]);
   const [input, setInput] = useState("");
   const [showInfoPanel, setShowInfoPanel] = useState(true);
@@ -99,6 +97,7 @@ export default function Home() {
               handleSend={handleSend}
               isBotTyping={isBotTyping}
               setChatLog={setChatLog}
+              editingIndex={editingIndex}
               setEditingIndex={setEditingIndex}
               deleteIndex={deleteIndex}
               setDeleteIndex={setDeleteIndex}
@@ -116,4 +115,5 @@ export default function Home() {
       </div>
     </div>
   );
+  // return <ChatbotUI />;
 }
