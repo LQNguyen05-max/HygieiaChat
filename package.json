@@ -1,17 +1,18 @@
 {
   "name": "hygieiachat",
   "version": "1.0.0",
-  "description": "[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&pause=1000&width=435&lines=HygieiaChat)](https://git.io/typing-svg)\r # 🤖 AI-Driven Healthcare Chatbot",
+  "description": "AI-Driven Healthcare Chatbot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client": "cd client && npm run dev",
+    "server": "cd server && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.7"
+    "concurrently": "^8.2.2"
   }
 }
