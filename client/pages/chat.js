@@ -13,6 +13,82 @@ export default function ChatPage() {
     e.preventDefault();
     if (input.trim() === "") return;
 
+    if (editingIndex !== null) {
+      // Edit existing user message
+      setChatLog((prev) =>
+        prev.map((msg, idx) =>
+          idx === editingIndex
+            ? { ...msg, message: input, timestamp: new Date().toLocaleTimeString() }
+            : msg
+        )
+      );
+      setIsBotTyping(true);
+      try {
+        const response = await fetch("http://localhost:5000/api/responses", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message: input }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to get response");
+        }
+
+        const data = await response.json();
+        setChatLog((prev) => {
+          // Replace the bot message after the edited user message, if it exists and is from the bot
+          const updated = prev.map((msg, idx) => {
+            if (idx === editingIndex + 1 && msg.sender === "bot") {
+              return {
+                ...msg,
+                message: data.message,
+                timestamp: new Date().toLocaleTimeString(),
+              };
+            }
+            return msg;
+          });
+          // If there is no bot message after, add one
+          if (!(prev[editingIndex + 1] && prev[editingIndex + 1].sender === "bot")) {
+            updated.splice(editingIndex + 1, 0, {
+              message: data.message,
+              sender: "bot",
+              timestamp: new Date().toLocaleTimeString(),
+            });
+          }
+          return updated;
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        setChatLog((prev) => {
+          const updated = prev.map((msg, idx) => {
+            if (idx === editingIndex + 1 && msg.sender === "bot") {
+              return {
+                ...msg,
+                message: "Sorry, I encountered an error. Please try again.",
+                timestamp: new Date().toLocaleTimeString(),
+              };
+            }
+            return msg;
+          });
+          if (!(prev[editingIndex + 1] && prev[editingIndex + 1].sender === "bot")) {
+            updated.splice(editingIndex + 1, 0, {
+              message: "Sorry, I encountered an error. Please try again.",
+              sender: "bot",
+              timestamp: new Date().toLocaleTimeString(),
+            });
+          }
+          return updated;
+        });
+      } finally {
+        setIsBotTyping(false);
+        setEditingIndex(null);
+        setInput("");
+      }
+      return;
+    }
+
     // Add user message to chat log
     const userMessage = {
       message: input,
