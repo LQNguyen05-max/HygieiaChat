@@ -1,5 +1,5 @@
-import { useRef, useEffect } from "react";
-import { Send, Pencil, Trash2 } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+import { Send, Pencil, Trash2, Paperclip, FileType } from "lucide-react";
 
 export default function MedicalChatbot({
   input,
@@ -15,6 +15,74 @@ export default function MedicalChatbot({
 }) {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [showFileTypeMenu, setShowFileTypeMenu] = useState(false);
+  const [selectFileType, setSelectFileType] = useState(null);
+
+  // Map following file types to accept
+  const fileTypeOptions = [
+    { label: "PNG", accept: ".png", mime: "image/png" },
+    { label: "PDF", accept: ".pdf", mime: "application/pdf" },
+    { label: "JPEG", accept: ".jpeg", mime: "image/jpeg" },
+    {
+      label: "XLSX",
+      accept: ".xlsx",
+      mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    },
+    {
+      label: "DOCX",
+      accept: ".docx",
+      mime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    },
+  ];
+
+  const handleFileTypeSelect = (option) => {
+    setSelectFileType(option);
+    setShowFileTypeMenu(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.setAttribute("accept", option.accept);
+      fileInputRef.current.value = "";
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (e) => {
+    // e.preventDefault();
+    // if (!input) return;
+
+    // File selection handling
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      // Check if the file upload was successful
+      if (!response.ok) {
+        throw new Error("File upload failed");
+      }
+      setChatLog((prev) => [
+        ...prev,
+        {
+          sender: "user",
+          message: `File uploaded: ${file.name}`,
+        },
+      ]);
+    } catch (error) {
+      setChatLog((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          message: `Error uploading file: ${error.message}`,
+        },
+      ]);
+    }
+  };
 
   // Auto-scroll to the bottom when messages change
   useEffect(() => {
@@ -160,6 +228,65 @@ export default function MedicalChatbot({
             <Send size={20} />
           </button>
         </form>
+        <div className="p-4 border-b flex items-center gap-3">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept=".png, .pdf, .jpeg, .docx, .xlsx"
+            style={{ display: "none" }}
+          />
+          {/* Wrap the button and menu in a relative container */}
+          <div style={{ position: "relative" }}>
+            <button
+              type="button"
+              onClick={() => setShowFileTypeMenu((prev) => !prev)}
+              className="p-2 rounded hover:bg-gray-100"
+              aria-label="Attach File"
+            >
+              <Paperclip
+                className="cursor-pointer tetx-grey-100 hover:text-grey-800"
+                size={20}
+              />
+            </button>
+            {/* File Type Options - horizontal below the button */}
+            {showFileTypeMenu && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  marginTop: "0.5rem",
+                  background: "#fff",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  zIndex: 10,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              >
+                {fileTypeOptions.map((option, idx) => (
+                  <div
+                    key={option.label}
+                    style={{
+                      padding: "0.5rem 1rem",
+                      cursor: "pointer",
+                      borderRight:
+                        idx !== fileTypeOptions.length - 1
+                          ? "1px solid #eee"
+                          : "none",
+                      whiteSpace: "nowrap",
+                    }}
+                    onClick={() => handleFileTypeSelect(option)}
+                  >
+                    {option.label}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
         <div className="medical-chatbot-disclaimer">
           <p>
             Disclaimer: This chatbot provides general information about medical
