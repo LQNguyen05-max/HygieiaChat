@@ -237,12 +237,15 @@ h1, h2, h3, h4, h5, h6 {
 /* Modal styles */
 .modal-overlay {
   position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 50;
 }
 
 .modal-content {
@@ -271,6 +274,85 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #b91c1c;
 }
 
+/* Medical Receipt Button */
+.medical-chatbot-receipt-btn {
+  color: #38bdf8;
+  padding: 0.5rem;           /* Add padding for a larger clickable area */
+  border-radius: 0.5rem;     /* Rounded corners */
+  transition: color 0.2s, background 0.2s;
+  display: inline-flex;      /* Keeps icon centered in the area */
+  align-items: center;
+  justify-content: center;
+}
+
+.medical-chatbot-receipt-btn:hover {
+  color: #0369a1;
+  background: #e0f2fe;      /* Light blue background */
+  cursor: pointer;
+}
+
+/* Medical Receipt Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s
+}
+
+.modal-content{
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem 2.5rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #bbf7d0;
+  animation: popIn 0.2s;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.modal-btn{
+  background: var(--mint-400);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: background 0.18s;
+  box-shadow: 0 1px 4px rgba(52, 211, 153, 0.08);
+}
+
+.modal-btn:disabled {
+  background: #a7f3d0; /* mint-200 */
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.modal-btn-secondary {
+  background: #a7f3d0; 
+  color: #374151;
+}
+
+.modal-btn:hover:not(:disabled) {
+  background: #059669; 
+  color: #fff;
+}
+
+.modal-btn-secondary:hover {
+  background: #e5e7eb;
+}
+
 /* Animations */
 @keyframes bounce {
   0%, 100% {
@@ -293,5 +375,16 @@ h1, h2, h3, h4, h5, h6 {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
