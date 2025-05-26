@@ -61,6 +61,7 @@ app.get("/", (req, res) => {
   res.send("HygieiaBot server is up!");
 });
 
+// File upload route
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
@@ -69,6 +70,37 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
     return res.status(400).json({ error: "No file uploaded." });
   }
   res.json({ message: "File uploaded successfully.", file: req.file });
+});
+
+// Receipt email route
+const nodemailer = require("nodemailer");
+
+app.post("/api/send-receipt", async (req, res) => {
+  const { email, receipt } = req.body;
+  if (!email || !receipt) {
+    return res.status(400).json({ error: "Email and receipt are required." });
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  try {
+    await transporter.sendMail({
+      from: `"HygieiaBot" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "ChatBot Receipt - HygieiaBot",
+      html: receipt,
+    });
+    res.json({ success: true, message: "Receipt sent successfully." });
+  } catch (error) {
+    console.error("Email Error:", error);
+    res.status(500).json({ error: "Failed to send receipt." });
+  }
 });
 
 // Start server

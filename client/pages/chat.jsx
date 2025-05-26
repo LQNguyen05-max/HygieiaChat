@@ -14,6 +14,9 @@ export default function ChatPage() {
   const [isInfoPanelOpen, setIsInfoPanelOpen] = useState(false);
 
   const handleSend = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return; // Prevent sending empty messages
+
     // timestamp for each message
     const now = new Date();
     const timeString = now.toLocaleTimeString([], {

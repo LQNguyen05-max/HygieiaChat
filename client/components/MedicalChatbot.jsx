@@ -1,5 +1,35 @@
 import { useRef, useEffect, useState } from "react";
-import { Send, Pencil, Trash2, Paperclip, FileType } from "lucide-react";
+import { Send, Pencil, Trash2, Paperclip, Mail } from "lucide-react";
+
+function generateReceiptEmailHTML(chatLog) {
+  return `
+    <div style="font-family:sans-serif;">
+      <h2>Chat Receipt</h2>
+      <div>
+        ${
+          chatLog.length === 0
+            ? "<p>No conversation yet.</p>"
+            : chatLog
+                .map(
+                  (msg) => `
+          <div style="margin-bottom:8px;">
+            <strong>${msg.sender === "user" ? "You" : "Bot"}:</strong> ${
+                    msg.message
+                  }
+            ${
+              msg.timestamp
+                ? `<span style="color:#888;font-size:12px;margin-left:8px;">${msg.timestamp}</span>`
+                : ""
+            }
+          </div>
+        `
+                )
+                .join("")
+        }
+      </div>
+    </div>
+  `;
+}
 
 export default function MedicalChatbot({
   input,
@@ -18,6 +48,12 @@ export default function MedicalChatbot({
   const fileInputRef = useRef(null);
   const [showFileTypeMenu, setShowFileTypeMenu] = useState(false);
   const [selectFileType, setSelectFileType] = useState(null);
+
+  // State for showing receipt options
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [receiptEmail, setReceiptEmail] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   // Map following file types to accept
   const fileTypeOptions = [
@@ -92,6 +128,26 @@ export default function MedicalChatbot({
   // Focus on the input field when component mounts
   useEffect(() => {
     inputRef.current?.focus();
+  }, []);
+
+  // Disable body scroll when delete modal is open
+  useEffect(() => {
+    if (deleteIndex !== null) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [deleteIndex]);
+
+  // Disable horizontal scroll on the body
+  useEffect(() => {
+    document.body.style.overflowX = "hidden";
+    return () => {
+      document.body.style.overflowX = "";
+    };
   }, []);
 
   // Enter a key event to send the message
@@ -237,17 +293,34 @@ export default function MedicalChatbot({
             style={{ display: "none" }}
           />
           {/* Wrap the button and menu in a relative container */}
-          <div style={{ position: "relative" }}>
+          {/* Wrap both icons in a flex container with gap: 5px */}
+          <div
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+            }}
+          >
             <button
               type="button"
               onClick={() => setShowFileTypeMenu((prev) => !prev)}
               className="p-2 rounded hover:bg-gray-100"
               aria-label="Attach File"
+              style={{ padding: 0, background: "none", border: "none" }}
             >
               <Paperclip
-                className="cursor-pointer tetx-grey-100 hover:text-grey-800"
-                size={20}
+                className="cursor-pointer text-grey-100 hover:text-grey-800"
+                size={25}
               />
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowReceipt(true)}
+              className="medical-chatbot-receipt-btn"
+              style={{ padding: 0, background: "none", border: "none" }}
+            >
+              <Mail size={25} />
             </button>
             {/* File Type Options - horizontal below the button */}
             {showFileTypeMenu && (
@@ -307,7 +380,7 @@ export default function MedicalChatbot({
               style={{
                 marginTop: "1rem",
                 display: "flex",
-                gap: "1rem",
+                gap: "5px",
                 justifyContent: "center",
               }}
             >
@@ -331,6 +404,97 @@ export default function MedicalChatbot({
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Receipt Modal */}
+      {showReceipt && (
+        <div className="modal-overlay">
+          <div
+            className="modal-content"
+            style={{ maxWidth: 600, width: "100%" }}
+          >
+            <h2>Chat Receipt</h2>
+            <div
+              className="chat-receipt-content"
+              style={{
+                maxHeight: 300,
+                overflowY: "auto",
+                marginBottom: 16,
+                border: "1px solid #eee",
+                padding: 8,
+              }}
+            >
+              {chatLog.length === 0 ? (
+                <p>No conversation yet.</p>
+              ) : (
+                chatLog.map((msg, idx) => (
+                  <div key={idx} style={{ marginBottom: 8 }}>
+                    <strong>{msg.sender === "user" ? "You" : "Bot"}:</strong>{" "}
+                    {msg.message}
+                    {msg.timestamp && (
+                      <span
+                        style={{ color: "#888", fontSize: 12, marginLeft: 8 }}
+                      >
+                        {msg.timestamp}
+                      </span>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setSending(true);
+                setSent(false);
+                // Send chatLog and email to backend
+                const receipt = generateReceiptEmailHTML(chatLog);
+                const res = await fetch(
+                  "http://localhost:5000/api/send-receipt",
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      email: receiptEmail,
+                      receipt,
+                    }),
+                  }
+                );
+                setSending(false);
+                setSent(res.ok);
+              }}
+              style={{ marginBottom: 12 }}
+            >
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={receiptEmail}
+                onChange={(e) => setReceiptEmail(e.target.value)}
+                required
+                style={{ padding: 8, width: "70%", marginRight: 8 }}
+              />
+              <button type="submit" disabled={sending} className="modal-btn">
+                {sending ? "Sending..." : "Send to Email"}
+              </button>
+              {sent && (
+                <span style={{ color: "green", marginLeft: 8 }}>Sent!</span>
+              )}
+            </form>
+            <button
+              className="modal-btn modal-btn-secondary"
+              onClick={() => window.print()}
+              style={{ marginRight: 25 }}
+            >
+              Print
+            </button>
+            <button
+              className="modal-btn modal-btn-secondary"
+              onClick={() => setShowReceipt(false)}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
