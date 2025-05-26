@@ -2,19 +2,9 @@ import { useState } from "react";
 import MedicalChatbot from "../components/MedicalChatbot";
 import InfoPanel from "../components/InfoPanel";
 import { Info } from "lucide-react";
-import UserProfile from "../components/UserProfile";
-
-// Helper function for custom replies
-const getCustomReply = (input) => {
-  const lowerInput = input.toLowerCase();
-  if (lowerInput.includes("hello") || lowerInput.includes("hi")) {
-    return "Hello! How can I help you with your health questions today?";
-  }
-  if (lowerInput.includes("thank")) {
-    return "You're welcome! Feel free to ask if you have any other questions.";
-  }
-  return null;
-};
+import getCustomReply from "../util/customReply";
+import Image from "next/image";
+// import UserProfile from "../components/UserProfile";
 
 export default function ChatPage() {
   const [input, setInput] = useState("");
@@ -105,7 +95,6 @@ export default function ChatPage() {
 
   return (
     <div className="relative h-screen w-screen">
-      <UserProfile />
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">HygieiaChat</h1>
@@ -132,11 +121,11 @@ export default function ChatPage() {
           />
         </div>
       </div>
-      <InfoPanel 
+      <InfoPanel
         isOpen={isInfoPanelOpen}
         onClose={() => setIsInfoPanelOpen(false)}
         setInput={setInput}
       />
     </div>
   );
-} 
+}
