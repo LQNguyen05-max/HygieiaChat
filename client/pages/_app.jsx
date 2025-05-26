@@ -1,4 +1,4 @@
-import '../styles/globals.css';
+import '../styles/output.css';
 import { Navbar } from '../components/Navbar';
 
 // Create a custom App component to include which wraps the entire application in our

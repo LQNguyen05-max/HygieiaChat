@@ -89,7 +89,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-mint-200/30">
+      <section className="py-20 bg-gradient-to-r from-mint-300 to-mint-200">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
             Why Choose HygieiaChat?
@@ -120,7 +120,7 @@ export default function Home() {
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-16 text-center">
-              <h2 className="gradient-text mb-3 text-3xl font-bold md:text-4xl">
+              <h2 className="mb-3 text-3xl font-bold md:text-4xl">
                 Choose Your Plan
               </h2>
               <p className="mx-auto max-w-2xl text-muted-foreground">
@@ -146,10 +146,10 @@ export default function Home() {
                 <CardContent className="flex-grow">
                   <ul className="space-y-3">
                     {[
-                      'Up to 500MB file size',
-                      'Up to 2 minutes duration',
-                      'Basic transcription features',
-                      'Limited AI analysis',
+                      'Feature 1',
+                      'Feature 2',
+                      'Feature 3',
+                      'Feature 4',
                     ].map((feature, i) => (
                       <li key={i} className="flex items-center">
                         <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10">
@@ -172,13 +172,13 @@ export default function Home() {
               </Card>
 
               {/* Pro Tier */}
-              <Card className="glass-effect relative border-2 border-primary/30 shadow-lg shadow-primary/10 transition-all duration-300 hover:border-primary/50 hover:shadow-xl">
-                <div className="glass-effect absolute -right-3 -top-3 rounded-full border border-primary/20 bg-gradient-to-r from-primary/80 to-secondary/80 px-3 py-1 text-xs font-medium text-white">
+              <Card className="glass-effect relative border-2 border-mint-700/30 shadow-lg shadow-mint-700/10 transition-all duration-300 hover:border-mint-700/50 hover:shadow-xl">
+                <div className="absolute -right-3 -top-3 rounded-full border border-mint-700/20 bg-gradient-to-r from-mint-700 to-mint-800 px-3 py-1 text-xs font-medium text-white shadow-sm">
                   Most Popular
                 </div>
                 <CardHeader>
                   <CardTitle className="flex items-center text-2xl">
-                    <Crown className="mr-2 h-5 w-5 text-primary" />
+                    <Crown className="mr-2 h-5 w-5 text-mint-700" />
                     Pro
                   </CardTitle>
                   <CardDescription>For based sigmas</CardDescription>
@@ -190,17 +190,17 @@ export default function Home() {
                 <CardContent className="flex-grow">
                   <ul className="space-y-3">
                     {[
-                      'Unlimited file size',
-                      'Unlimited duration',
-                      'Advanced transcription accuracy',
-                      'Full AI analysis capabilities',
-                      'Priority support',
+                      'Feature 1',
+                      'Feature 2',
+                      'Feature 3',
+                      'Bottom Text',
+                      'Idk',
                     ].map((feature, i) => (
                       <li key={i} className="flex items-center">
-                        <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary/15">
-                          <Zap className="h-3 w-3 text-primary" />
+                        <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-mint-700/15 border border-mint-700/30">
+                          <Zap className="h-3 w-3 text-mint-700" />
                         </div>
-                        <span className="font-medium">{feature}</span>
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -208,9 +208,9 @@ export default function Home() {
                 <CardFooter>
                   <Button
                     asChild
-                    className="button-glow w-full rounded-full bg-gradient-to-r from-primary to-secondary"
+                    className="w-full rounded-full bg-mint-700 text-white hover:bg-mint-800"
                   >
-                    <Link href="/login">Get Pro</Link>
+                    <Link href="/login">Get Started</Link>
                   </Button>
                 </CardFooter>
               </Card>
@@ -219,7 +219,7 @@ export default function Home() {
         </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-mint-100 to-mint-300">
+      <section className="py-20 bg-gradient-to-r from-mint-200 to-mint-300">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">
             Ready to Receive Reliable Health Advice?
