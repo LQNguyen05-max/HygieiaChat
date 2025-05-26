@@ -15,7 +15,7 @@ export function Navbar() {
               <Button variant="ghost">Chat</Button>
             </Link>
             <Link href="/login">
-              <Button>Sign In</Button>
+              <Button className="bg-mint-700 text-white hover:bg-mint-800">Sign In</Button>
             </Link>
           </div>
         </div>

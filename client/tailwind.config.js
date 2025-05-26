@@ -51,4 +51,14 @@ module.exports = {
     },
   },
   plugins: [],
+  // Add these options for CLI
+  corePlugins: {
+    preflight: true,
+  },
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
+  experimental: {
+    optimizeUniversalDefaults: true,
+  },
 };
