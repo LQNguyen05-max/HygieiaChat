@@ -17,7 +17,7 @@ const customReply = [
   },
 ];
 
-export function getCustomReply(input) {
+export default function getCustomReply(input) {
   const found = customReply.find((item) => item.match(input));
   return found ? found.reply : null;
 }

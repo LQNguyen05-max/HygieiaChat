@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { Button } from './ui/button';
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 export function Navbar() {
   return (
@@ -9,17 +9,19 @@ export function Navbar() {
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-xl font-bold text-mint-700">HygieiaChat</span>
           </Link>
-          
+
           <div className="flex items-center space-x-4">
             <Link href="/chat">
               <Button variant="ghost">Chat</Button>
             </Link>
             <Link href="/login">
-              <Button className="bg-mint-700 text-white hover:bg-mint-800">Sign In</Button>
+              <Button className="bg-mint-700 text-white hover:bg-mint-800">
+                Sign In
+              </Button>
             </Link>
           </div>
         </div>
       </div>
     </nav>
   );
-} 
+}
