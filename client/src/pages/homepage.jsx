@@ -109,6 +109,7 @@ export default function Home() {
               <InfoPanel onClose={() => setShowInfo(false)} />
             </div>
           )}
+
         </div>
       </div>
     </div>
