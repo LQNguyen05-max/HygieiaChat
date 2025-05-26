@@ -3,7 +3,6 @@ import MedicalChatbot from "../components/MedicalChatbot";
 import InfoPanel from "../components/InfoPanel";
 import { Info } from "lucide-react";
 import getCustomReply from "../util/customReply";
-import Image from "next/image";
 // import UserProfile from "../components/UserProfile";
 
 export default function ChatPage() {
@@ -15,9 +14,6 @@ export default function ChatPage() {
   const [isInfoPanelOpen, setIsInfoPanelOpen] = useState(false);
 
   const handleSend = async (e) => {
-    e.preventDefault();
-    if (!input) return;
-
     // timestamp for each message
     const now = new Date();
     const timeString = now.toLocaleTimeString([], {

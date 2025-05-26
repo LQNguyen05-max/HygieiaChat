@@ -1,10 +1,12 @@
 // Load environment variables
 require("dotenv").config();
 
+// Import necessary modules
 const express = require("express");
 const cors = require("cors");
 const { OpenAI } = require("openai");
 
+// Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -57,6 +59,16 @@ app.post("/api/responses", async (req, res) => {
 // Test route
 app.get("/", (req, res) => {
   res.send("HygieiaBot server is up!");
+});
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+  res.json({ message: "File uploaded successfully.", file: req.file });
 });
 
 // Start server

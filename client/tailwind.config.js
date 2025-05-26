@@ -59,6 +59,6 @@ module.exports = {
     hoverOnlyWhenSupported: true,
   },
   experimental: {
-    optimizeUniversalDefaults: true,
+    // optimizeUniversalDefaults: true,
   },
 };
