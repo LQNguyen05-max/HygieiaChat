@@ -12,10 +12,10 @@ const PORT = process.env.PORT || 5000;
 
 // Setup OpenAI
 const openai = new OpenAI({
-  apiKey: process.env.API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 // check if API key is set
-// console.log(`OpenAI API Key: ${process.env.API_KEY}`),
+// console.log(`OpenAI API Key: ${process.env.OPENAI_API_KEY}`),
 
 // Middleware
 app.use(cors());

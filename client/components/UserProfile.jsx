@@ -27,7 +27,7 @@ export default function UserProfile() {
         className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors"
         title="User Profile"
       >
-        <CircleUser size={24} className="text-gray-700" />
+        <CircleUser size={30} className="text-gray-700" />
       </button>
 
       {showProfile && (
