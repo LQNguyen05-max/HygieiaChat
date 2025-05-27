@@ -235,7 +235,7 @@ export default function Home() {
               Contact Us
             </Link> */}
             <Link
-              href="/signup"
+              href="/login"
               className="hover:shadow-lg border-2 bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors"
             >
               Sign Up Today

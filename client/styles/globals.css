@@ -388,3 +388,16 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1);
   }
 }
+
+/* Toast container styles */
+.toast-container {
+  position: fixed;
+  top: 80px !important; /* Adjust this value to move toasts down */
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast-container > div {
+  margin-top: 8px;
+}
+
