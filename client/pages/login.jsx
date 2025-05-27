@@ -68,7 +68,7 @@ export default function LoginPage() {
       <div className="bg-white rounded-xl shadow-lg border border-gray-200 px-8 py-10 flex flex-col justify-start" style={{ width: 600, maxWidth: '90vw', minHeight: 500 }}>
         <div className="flex-1 flex flex-col">
           <div className="flex flex-col items-center mb-4">
-            <img src="/hybot.png" alt="Logo" className="h-12 w-12 mb-2" />
+   
             <h1 className="text-3xl font-bold text-blue-700 mb-1">HygieiaChat</h1>
             <h2 className="text-xl font-bold text-center mb-1">
               {mode === "signin" ? "Welcome back" : "Create your account"}
