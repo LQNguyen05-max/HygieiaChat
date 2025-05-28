@@ -3,7 +3,7 @@ import { CircleUser } from "lucide-react";
 import { auth } from '../lib/firebase';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 export default function UserProfile() {
   const [showProfile, setShowProfile] = useState(false);
