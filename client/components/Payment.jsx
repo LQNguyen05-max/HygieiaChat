@@ -4,11 +4,21 @@ import { useState } from "react";
 export default function PaymentPage() {
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
+    cardholder: "",
     cardNumber: "",
-    expiry: "",
+    expiryMonth: "",
+    expiryYear: "",
     cvv: "",
     zip: "",
   });
+
+  const [selectedCard, setSelectedCard] = useState('visa');
+
+  const cardOptions = [
+  { id: 'visa', src: '/images/visa.png', alt: 'Visa' },
+  { id: 'mastercard', src: '/images/mastercard.png', alt: 'MasterCard' },
+];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,40 +27,124 @@ export default function PaymentPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In real app: send to Stripe/Braintree
     alert("Payment submitted (simulated).");
   };
 
   return (
     <main className="payment-container">
-      <h1>Payment Information</h1>
-      <form onSubmit={handleSubmit} className="payment-form">
-        <label>
-          Cardholder Name
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-        </label>
+      <h1 className="title">Secure Checkout</h1>
+      <form onSubmit={handleSubmit} className="payment-form-split">
 
-        <label>
-          Card Number
-          <input type="text" name="cardNumber" value={formData.cardNumber} onChange={handleChange} required maxLength={16} />
-        </label>
+        <div className="card-options" style={{ display: 'flex', gap: '1rem' }}>
+            {cardOptions.map((card) => (
+          <div
+                key={card.id}
+                className={`card-option ${selectedCard === card.id ? 'selected' : ''}`}
+                onClick={() => setSelectedCard(card.id)}
+               >
+            <img src={card.src} alt={card.alt} width={60} />
+          </div>
+          ))}
+        </div>
 
-        <label>
-          Expiration Date (MM/YY)
-          <input type="text" name="expiry" value={formData.expiry} onChange={handleChange} required placeholder="MM/YY" />
-        </label>
+        <div className="form-section">
+          <h2>Credit Card Information</h2>
 
-        <label>
-          CVV
-          <input type="text" name="cvv" value={formData.cvv} onChange={handleChange} required maxLength={4} />
-        </label>
+          <div className="row">
+  <label className="full">
+    Cardholder Name
+    <input
+      type="text"
+      name="cardholder"
+      value={formData.cardholder}
+      onChange={handleChange}
+      required
+    />
+  </label>
+</div>
 
-        <label>
-          ZIP / Postal Code
-          <input type="text" name="zip" value={formData.zip} onChange={handleChange} required />
-        </label>
 
-        <button type="submit">Submit Payment</button>
+          <div className="row">
+            <label className="half">
+              Card Number
+              <input type="text" name="cardNumber" value={formData.cardNumber} onChange={handleChange} required maxLength={16} />
+            </label>
+
+            <label className="quarter">
+              CVV
+              <input type="text" name="cvv" value={formData.cvv} onChange={handleChange} required maxLength={3} />
+              <small className="helper-text">3-digit code on back of your card</small>
+            </label>
+          </div>
+
+          <div className="row">
+            <label className="quarter">
+              Expiry Month
+              <select name="expiryMonth" value={formData.expiryMonth} onChange={handleChange} required>
+                <option value="">MM</option>
+                {[...Array(12)].map((_, i) => (
+                  <option key={i} value={String(i + 1).padStart(2, "0")}>
+                    {String(i + 1).padStart(2, "0")}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="quarter">
+              Expiry Year
+              <select name="expiryYear" value={formData.expiryYear} onChange={handleChange} required>
+                <option value="">YY</option>
+                {[...Array(10)].map((_, i) => {
+                  const year = new Date().getFullYear() + i;
+                  return (
+                    <option key={i} value={String(year).slice(2)}>
+                      {String(year).slice(2)}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+
+            <label className="half">
+              ZIP / Postal Code
+              <input type="text" name="zip" value={formData.zip} onChange={handleChange} required maxLength={5} />
+            </label>
+          </div>
+        </div>
+
+        {/* Shopper Details */}
+        <div className="section-divider">
+          <h2>Shopper Details</h2>
+
+          <div className="row">
+  <label className="full">
+    Full Name
+    <input
+      type="text"
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+      required
+    />
+  </label>
+</div>
+
+<div className="row">
+  <label className="full">
+    Email Address
+    <input
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      required
+    />
+  </label>
+</div>
+
+        </div>
+
+        <button type="submit" className="select-button">Submit Payment</button>
       </form>
     </main>
   );
