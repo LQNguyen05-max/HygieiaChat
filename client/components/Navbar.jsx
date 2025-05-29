@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import { useState, useEffect } from 'react';
 import { auth } from '../lib/firebase';
 import UserProfile from './UserProfile';
-import About from "/pages/About";
 
 export function Navbar() {
   const [user, setUser] = useState(null);
@@ -27,9 +26,6 @@ export function Navbar() {
 
           {/* Middle Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {/* <Link href="/chat">
-              <Button variant="ghost">Chat Now</Button>
-            </Link> */}
             <Link
               href="/chat"
               className="text-gray-600 hover:text-mint-700 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-mint-700 after:transition-all after:duration-300 hover:after:w-full"
@@ -37,7 +33,7 @@ export function Navbar() {
               Chat
             </Link>
 
-            <Link to="/about" 
+            <Link href="/about" 
               className="text-gray-600 hover:text-mint-700 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-mint-700 after:transition-all after:duration-300 hover:after:w-full"
             >
               About
