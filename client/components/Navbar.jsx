@@ -1,32 +1,9 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { useState, useEffect } from "react";
-import { auth } from "../lib/firebase";
-import UserProfile from "./UserProfile";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-// import { useAuthState } from 'react-firebase-hooks/auth';
-// import { auth } from '@/lib/firebase';
-
-async function registerUser(email, password, name) {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    // set username
-    const user = userCredential.user;
-
-    // update user profile with username
-    await updateProfile(user, {
-      displayName: name,
-    });
-    console.log("User registered with the name: ", user.displayName);
-  } catch (error) {
-    console.error("Registration error: ", error);
-  }
-}
+import { useState, useEffect } from 'react';
+import { auth } from '../lib/firebase';
+import UserProfile from './UserProfile';
+import About from "/pages/About";
 
 export function Navbar() {
   const [user, setUser] = useState(null);
@@ -60,8 +37,7 @@ export function Navbar() {
               Chat
             </Link>
 
-            <Link
-              href="/about"
+            <Link to="/about" 
               className="text-gray-600 hover:text-mint-700 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-mint-700 after:transition-all after:duration-300 hover:after:w-full"
             >
               About
