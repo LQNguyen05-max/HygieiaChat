@@ -5,6 +5,8 @@ export const metadata = {
     description: "Learn more about your health with our AI chatbot",
 };
 
+
+//Adds HygieiaBot image as the Favicon, then creates the other children components (such as homepage, etc) for the website
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
