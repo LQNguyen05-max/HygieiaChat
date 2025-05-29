@@ -1,16 +1,27 @@
 import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { signInWithEmail, signUpWithEmail, signInWithGoogle } from "../lib/firebase";
+import { signInWithEmail, signUpWithEmail, signInWithGoogle, db } from "../lib/firebase";
 import { useRouter } from "next/router";
 import toast from 'react-hot-toast';
+import { getUserProfile } from "../lib/firebase";
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function LoginPage() {
   const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    // Set initial mode from query parameter
+    if (router.query.mode === 'signup') {
+      setMode('signup');
+    }
+  }, [router.query]);
 
   useEffect(() => {
     // Debug: Check if environment variables are loaded
@@ -21,24 +32,74 @@ export default function LoginPage() {
     });
   }, []);
 
+  useEffect(() => {
+    // Test Firestore connection
+    const testFirestore = async () => {
+      try {
+        console.log('Testing Firestore connection...');
+        const querySnapshot = await getDocs(collection(db, 'users'));
+        console.log('Firestore connection successful!');
+        console.log('Number of users in database:', querySnapshot.size);
+      } catch (error) {
+        console.error('Firestore connection test failed:', error);
+      }
+    };
+
+    testFirestore();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+    console.log('Starting sign in process...');
 
     try {
       if (mode === "signin") {
-        await signInWithEmail(email, password);
-        toast.success('Signed in successfully');
+        console.log('Attempting email/password sign in...');
+        const user = await signInWithEmail(email, password);
+        console.log('Sign in successful, getting user profile...');
+        const profile = await getUserProfile(user.uid);
+        console.log('User profile retrieved:', profile);
+        
+        // Show toast and wait a moment before navigation
+        toast.success(`Welcome, ${profile?.firstName || 'there'}!`);
+        console.log('Toast shown, waiting before navigation...');
+        
+        // Add a small delay to ensure toast is visible
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        console.log('Navigating to home page...');
+        await router.push("/");
+        console.log('Navigation complete');
       } else {
-        await signUpWithEmail(email, password);
-        toast.success('Account created successfully');
+        if (!firstName || !lastName) {
+          throw new Error('First name and last name are required');
+        }
+        console.log('Attempting email/password sign up...');
+        const user = await signUpWithEmail(email, password, firstName, lastName);
+        console.log('Sign up successful');
+        
+        toast.success(`Welcome, ${firstName}!`);
+        console.log('Toast shown, waiting before navigation...');
+        
+        // Add a small delay to ensure toast is visible
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        console.log('Navigating to home page...');
+        await router.push("/");
+        console.log('Navigation complete');
       }
-      router.push("/"); // Redirect to dashboard after successful auth
     } catch (error) {
+      console.error('Authentication error:', {
+        code: error.code,
+        message: error.message,
+        fullError: error
+      });
       setError(error.message);
       toast.error(error.message);
     } finally {
+      console.log('Setting loading to false');
       setLoading(false);
     }
   };
@@ -48,10 +109,14 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await signInWithGoogle();
-      toast.success('Signed in with Google successfully');
-      router.push("/dashboard");
+      console.log('Starting Google sign in...');
+      const result = await signInWithGoogle();
+      const profile = await getUserProfile(result.uid);
+      console.log('Google sign in successful:', result);
+      toast.success(`Welcome, ${profile?.firstName || 'there'}!`);
+      await router.push("/dashboard"); // Wait for navigation to complete
     } catch (error) {
+      console.error('Google sign in error:', error);
       setError(error.message);
       toast.error(error.message);
     } finally {
@@ -68,9 +133,7 @@ export default function LoginPage() {
       <div className="bg-white rounded-xl shadow-lg border border-gray-200 px-8 py-10 flex flex-col justify-start" style={{ width: 600, maxWidth: '90vw', minHeight: 500 }}>
         <div className="flex-1 flex flex-col">
           <div className="flex flex-col items-center mb-4">
-   
-            <h1 className="text-3xl font-bold text-blue-700 mb-1">HygieiaChat</h1>
-            <h2 className="text-xl font-bold text-center mb-1">
+            <h2 className="text-2xl font-bold text-center mb-1">
               {mode === "signin" ? "Welcome back" : "Create your account"}
             </h2>
             <p className="text-center text-gray-500 text-sm">
@@ -78,11 +141,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
-              {error}
-            </div>
-          )}
 
           {/* Tabs */}
           <div className="flex mb-8 gap-2">
@@ -111,6 +169,34 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="mb-6">
             <div className="space-y-8 mb-8">
+              {mode === "signup" && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 p-2 rounded">
+                    <label className="block mb-1 text-sm font-medium" htmlFor="firstName">First Name</label>
+                    <input
+                      id="firstName"
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="John"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      required={mode === "signup"}
+                    />
+                  </div>
+                  <div className="bg-gray-50 p-2 rounded">
+                    <label className="block mb-1 text-sm font-medium" htmlFor="lastName">Last Name</label>
+                    <input
+                      id="lastName"
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="Doe"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      required={mode === "signup"}
+                    />
+                  </div>
+                </div>
+              )}
               <div className="bg-gray-50 p-2 rounded">
                 <label className="block mb-1 text-sm font-medium" htmlFor="email">Email</label>
                 <input
@@ -126,9 +212,9 @@ export default function LoginPage() {
               <div className="bg-gray-50 p-2 rounded">
                 <div className="flex justify-between items-center mb-1">
                   <label htmlFor="password" className="text-sm font-medium">Password</label>
-                  {mode === "signin" && (
+                  {/* {mode === "signin" && (
                     <a href="#" className="text-blue-500 text-xs hover:underline">Forgot?</a>
-                  )}
+                  )} */}
                 </div>
                 <input
                   id="password"
