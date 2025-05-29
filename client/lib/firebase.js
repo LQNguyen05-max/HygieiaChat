@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -16,12 +16,12 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 // Debug: Log the actual config being used
-if (typeof window !== 'undefined') {
-  console.log('Firebase Config being used:', {
+if (typeof window !== "undefined") {
+  console.log("Firebase Config being used:", {
     apiKey: firebaseConfig.apiKey,
     authDomain: firebaseConfig.authDomain,
     projectId: firebaseConfig.projectId,
@@ -36,26 +36,39 @@ const googleProvider = new GoogleAuthProvider();
 // Email/Password Sign In
 export const signInWithEmail = async (email, password) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     return userCredential.user;
   } catch (error) {
-    console.error('Sign in error:', {
+    console.error("Sign in error:", {
       code: error.code,
-      message: error.message
+      message: error.message,
     });
     throw error;
   }
 };
 
 // Email/Password Sign Up
-export const signUpWithEmail = async (email, password) => {
+export const signUpWithEmail = async (email, password, name) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    if (name) {
+      await updateProfile(userCredential.user, {
+        displayName: name,
+      });
+    }
     return userCredential.user;
   } catch (error) {
-    console.error('Sign up error:', {
+    console.error("Sign up error:", {
       code: error.code,
-      message: error.message
+      message: error.message,
     });
     throw error;
   }
@@ -67,9 +80,9 @@ export const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
   } catch (error) {
-    console.error('Google sign in error:', {
+    console.error("Google sign in error:", {
       code: error.code,
-      message: error.message
+      message: error.message,
     });
     throw error;
   }

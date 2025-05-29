@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { CircleUser } from "lucide-react";
-import { auth } from '../lib/firebase';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import toast from 'react-hot-toast';
+import { CircleUser, Settings } from "lucide-react";
+import { auth } from "../lib/firebase";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function UserProfile() {
   const [showProfile, setShowProfile] = useState(false);
@@ -12,11 +12,11 @@ export default function UserProfile() {
   const handleSignOut = async () => {
     try {
       await auth.signOut();
-      toast.success('Signed out successfully');
-      router.push('/');
+      toast.success("Signed out successfully");
+      router.push("/");
     } catch (error) {
-      console.error('Error signing out:', error);
-      toast.error('Failed to sign out');
+      console.error("Error signing out:", error);
+      toast.error("Failed to sign out");
     }
   };
 
@@ -31,22 +31,29 @@ export default function UserProfile() {
       </button>
 
       {showProfile && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-          <div className="px-4 py-2 border-b border-gray-100">
-            <p className="text-sm font-medium text-gray-900">{auth.currentUser?.email}</p>
+        <div className="absolute right-2 mt-2 w-36 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 animate-fade-in">
+          <div className="px-2.5 py-2 border-b border-gray-100">
+            <p
+              className="font-medium text-gray-900"
+              style={{ fontSize: "16px", fontFamily: "san serif, recursive" }}
+            >
+              Hello {auth.currentUser?.displayName || auth.currentUser?.email}!
+            </p>
           </div>
-          
-          <Link 
+
+          <Link
             href="/account"
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="block py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setShowProfile(false)}
+            style={{ paddingLeft: "60px", paddingRight: "60px" }}
           >
-            Account Settings
+            <Settings className="inline mr-2" size={20} />
           </Link>
-          
+
           <button
             onClick={handleSignOut}
-            className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+            className="block w-full text-left py-2 text-sm text-red-600 hover:bg-gray-100"
+            style={{ paddingLeft: "42px", paddingRight: "42px" }}
           >
             Sign Out
           </button>
