@@ -28,24 +28,20 @@ export function Navbar() {
 
           {/* Middle Navigation - Chat, About, Contact */}
           <div className="hidden md:flex items-center space-x-8">
-            {/* <Link href="/chat">
-              <Button variant="ghost">Chat Now</Button>
-            </Link> */}
-            <Link 
-              href="/chat" 
+            <Link
+              href="/chat"
               className="text-gray-600 hover:text-mint-700 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-mint-700 after:transition-all after:duration-300 hover:after:w-full"
             >
               Chat
             </Link>
 
-            <Link 
-              href="/about" 
+            <Link href="/about" 
               className="text-gray-600 hover:text-mint-700 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-mint-700 after:transition-all after:duration-300 hover:after:w-full"
             >
               About
             </Link>
-            <Link 
-              href="/contact" 
+            <Link
+              href="/contact"
               className="text-gray-600 hover:text-mint-700 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-mint-700 after:transition-all after:duration-300 hover:after:w-full"
             >
               Contact

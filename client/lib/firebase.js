@@ -1,7 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -18,29 +24,17 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// // Debug: Log the actual config being used
-// if (typeof window !== 'undefined') {
-//   console.log('Firebase Config being used:', {
-//     apiKey: firebaseConfig.apiKey,
-//     authDomain: firebaseConfig.authDomain,
-//     projectId: firebaseConfig.projectId,
-//     storageBucket: firebaseConfig.storageBucket,
-//     messagingSenderId: firebaseConfig.messagingSenderId,
-//     appId: firebaseConfig.appId,
-//     measurementId: firebaseConfig.measurementId
-//   });
-
-//   // Validate required config values
-//   const requiredFields = ['apiKey', 'authDomain', 'projectId'];
-//   const missingFields = requiredFields.filter(field => !firebaseConfig[field]);
-  
-//   if (missingFields.length > 0) {
-//     console.error('Missing required Firebase configuration:', missingFields);
-//   }
-// }
+// Debug: Log the actual config being used
+if (typeof window !== 'undefined') {
+  console.log('Firebase Config being used:', {
+    apiKey: firebaseConfig.apiKey,
+    authDomain: firebaseConfig.authDomain,
+    projectId: firebaseConfig.projectId,
+  });
+}
 
 // Initialize Firebase
 let app;
@@ -93,39 +87,26 @@ const getFriendlyErrorMessage = (error) => {
 // Email/Password Sign In
 export const signInWithEmail = async (email, password) => {
   try {
-    console.log('Attempting sign in with email:', email);
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    console.log('Sign in successful:', userCredential.user.uid);
     return userCredential.user;
   } catch (error) {
-    console.error('Sign in error:', {
+    console.error("Sign in error:", {
       code: error.code,
-      message: error.message,
-      fullError: error
+      message: error.message
     });
     throw new Error(getFriendlyErrorMessage(error));
   }
 };
 
 // Email/Password Sign Up
-export const signUpWithEmail = async (email, password, firstName, lastName) => {
+export const signUpWithEmail = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    
-    // Create user profile in Firestore
-    await createUserProfile(userCredential.user.uid, {
-      email,
-      firstName,
-      lastName,
-      createdAt: new Date().toISOString()
-    });
-    
     return userCredential.user;
   } catch (error) {
-    console.error('Sign up error:', {
+    console.error("Sign up error:", {
       code: error.code,
-      message: error.message,
-      fullError: error
+      message: error.message
     });
     throw new Error(getFriendlyErrorMessage(error));
   }
@@ -150,46 +131,9 @@ export const signInWithGoogle = async () => {
     
     return result.user;
   } catch (error) {
-    console.error('Google sign in error:', {
+    console.error("Google sign in error:", {
       code: error.code,
-      message: error.message,
-      fullError: error
-    });
-    throw new Error(getFriendlyErrorMessage(error));
-  }
-};
-
-// Function to create/update user profile
-export const createUserProfile = async (userId, userData) => {
-  try {
-    const userRef = doc(db, 'users', userId);
-    await setDoc(userRef, {
-      ...userData,
-      updatedAt: new Date().toISOString()
-    }, { merge: true });
-    return true;
-  } catch (error) {
-    console.error('Error creating user profile:', error);
-    throw error;
-  }
-};
-
-// Function to get user profile
-export const getUserProfile = async (userId) => {
-  try {
-    console.log('Getting user profile for:', userId);
-    const userRef = doc(db, 'users', userId);
-    const userSnap = await getDoc(userRef);
-    console.log('User profile retrieved:', userSnap.exists() ? 'exists' : 'not found');
-    if (userSnap.exists()) {
-      return userSnap.data();
-    }
-    return null;
-  } catch (error) {
-    console.error('Error getting user profile:', {
-      code: error.code,
-      message: error.message,
-      fullError: error
+      message: error.message
     });
     throw error;
   }
