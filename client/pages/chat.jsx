@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-// import { useRouter } from "next/router";
-import MedicalChatbot from "../../components/MedicalChatbot";
-import InfoPanel from "../../components/InfoPanel";
-import UserProfile from "../../components/UserProfile";
-import { getCustomReply } from "../../util/customReply";
+import MedicalChatbot from "../components/MedicalChatbot";
+import InfoPanel from "../components/InfoPanel";
+import UserProfile from "../components/UserProfile";
+import { getCustomReply } from "../util/customReply";
 
-// This is the main page of your Next.js application for right now.
-export default function Home() {
-  // create state for the chat and the input
+// POST request to the backend to route the Chatbot UI; acts like a router
+export default function Chat() {
   const [chatLog, setChatLog] = useState([]);
   const [input, setInput] = useState("");
   const [showInfoPanel, setShowInfoPanel] = useState(true);
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [deleteIndex, setDeleteIndex] = useState(null);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -24,6 +24,13 @@ export default function Home() {
       minute: "2-digit",
     });
 
+    if (editingIndex !== null) {
+      // Update the existing message
+      setChatLog((prev) =>
+        prev.filter((_, i) => i !== editingIndex && i !== editingIndex + 1)
+      );
+      setEditingIndex(null);
+    }
     // Add user message
     const userMessage = {
       sender: "user",
@@ -89,6 +96,11 @@ export default function Home() {
               setInput={setInput}
               handleSend={handleSend}
               isBotTyping={isBotTyping}
+              setChatLog={setChatLog}
+              editingIndex={editingIndex}
+              setEditingIndex={setEditingIndex}
+              deleteIndex={deleteIndex}
+              setDeleteIndex={setDeleteIndex}
             />
             {!showInfoPanel && (
               <button
@@ -103,4 +115,5 @@ export default function Home() {
       </div>
     </div>
   );
+  // return <ChatbotUI />;
 }

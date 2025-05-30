@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
-/* Test */
+/* Test
 .test-tailwind {
   @apply bg-red-500 text-white p-4;
-}
+} */
 
 /* Main Layout */
 .main-layout {
@@ -43,7 +43,7 @@
   background: #fff;         
   color: #065f46;               
   border: none;
-  border-radius: 9999px;        
+  border-radius: 1rem;        
   padding: 0.5rem 1.25rem;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
@@ -52,7 +52,7 @@
 }
 
 .reopen-info-panel:hover {
-  background: #bbf7d0;          /* Slightly darker green on hover */
+  background: #bbf7d0;         
   color: #047857;
   transform: scale(1.05);
 }
@@ -80,7 +80,7 @@
 
 @media only screen and (max-width: 768px) {
   body {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 
@@ -90,10 +90,20 @@
   }
 }
 
+/* body */
+body {
+  /* color of the medical-container */
+  background: #d1fae5;
+}
+
 /* Info Panel */
 .info-panel {
-  cursor: pointer;
+  /* cursor: pointer; */
   transition: transform 0.15s;
+}
+
+.info-panel-logo {
+  cursor: pointer;
 }
 
 .info-panel-logo:hover {
@@ -200,13 +210,12 @@
 
 .example-list ol:hover {
   color: green;
-  
 }
 
 /* Limitations */
 /* text-md font-semibold text-gray-700 mb-2 */
 .info-panel-limitations {
-  font-size: 1.125rem; /* med */
+  font-size: 1.125rem; 
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 0.5rem;
@@ -259,11 +268,11 @@
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
-  background: #d1fae5; /* Tailwind's bg-gray-50 */
+  background: #d1fae5; 
 }
 
 .medical-chatbot-inner {
-  max-width: 48rem; /* 768px, Tailwind's max-w-3xl */
+  max-width: 48rem; 
   margin-left: auto;
   margin-right: auto;
 }
@@ -291,26 +300,27 @@
 }
 
 .medical-chatbot-message.user {
-  background: #3b82f6; /* Tailwind's bg-blue-500 */
+  background: #3b82f6; 
   color: #fff;
 }
 
 .medical-chatbot-message.bot {
   background: #fff;
-  color: #1f2937; /* Tailwind's text-gray-800 */
-  border: 1px solid #e5e7eb; /* Tailwind's border-gray-200 */
+  color: #1f2937; 
+  border: 1px solid #e5e7eb; 
 }
 
 /* Timestamp */
 .medical-chatbot-timestamp {
   font-size: 0.75rem;
   margin-top: 0.25rem;
-  color: #60a5fa; /* text-blue-100 for user */
+  color: #60a5fa; 
   text-align: right;
   display: block;
 }
+
 .medical-chatbot-message.bot .medical-chatbot-timestamp {
-  color: #6b7280; /* text-gray-500 */
+  color: #6b7280; 
   text-align: right;
   display: block;
 }
@@ -321,6 +331,7 @@
   display: flex;
   justify-content: flex-start;
 }
+
 .medical-chatbot-typing-bubble {
   background: #fff;
   color: #1f2937;
@@ -329,6 +340,7 @@
   border-radius: 0.5rem;
   display: flex;
   gap: 0.5rem;
+
 }
 .medical-chatbot-typing-dot {
   width: 0.5rem;
@@ -338,6 +350,7 @@
   animation: bounce 1s infinite;
   display: inline-block;
 }
+
 .medical-chatbot-typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .medical-chatbot-typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
@@ -352,6 +365,7 @@
   border-top: 1px solid #fff;
   background: #d1fae5;
 }
+
 .medical-chatbot-input-row {
   max-width: 48rem;
   width: 100%;
@@ -362,6 +376,49 @@
   border-radius: 0.5rem;
   overflow: hidden;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Edit Button */
+.medical-chatbot-edit-action {
+  color:black;
+  background: transparent;
+  border-radius: 0.25rem;
+  padding: 2px 8px;
+  /* font-size: 2rem; */
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
+  user-select: none;
+  animation: fadeIn 0.4s ease forwards;
+  animation-delay: 0.15s;
+}
+
+.medical-chatbot-edit-action:hover {
+  background: #bae6fd;
+  color: #1e40af;
+  transform: scale(1.05);
+}
+
+.medical-chatbot-send-btn {
+  background: #2563eb;
+  color: #fff;
+  padding: 0 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Text Area */
 .medical-chatbot-textarea {
   flex: 1;
   resize: none;
@@ -377,18 +434,11 @@
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px #3b82f6;
 }
-.medical-chatbot-send-btn {
-  background: #2563eb;
-  color: #fff;
-  padding: 0 1rem;
-  border-radius: 0 0.5rem 0.5rem 0;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s;
-}
+
 .medical-chatbot-send-btn:hover:not(:disabled) {
   background: #1d4ed8;
 }
+
 .medical-chatbot-send-btn:disabled {
   background: #60a5fa;
   cursor: not-allowed;
@@ -400,6 +450,45 @@
   margin: 0.5rem auto 0 auto;
   font-size: 0.75rem;
   color: #6b7280;
+}
+
+/* Modal Page */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  min-width: 300px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  text-align: center;
+}
+.modal-btn {
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.25rem;
+  border: none;
+  background: #d1fae5;
+  color: #18b46e;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.modal-btn:hover {
+  background: #bae6fd;
+}
+.modal-btn-danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
+.modal-btn-danger:hover {
+  background: #fecaca;
 }
 
 *,
