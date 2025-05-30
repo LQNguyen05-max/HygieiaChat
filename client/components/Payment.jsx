@@ -16,8 +16,8 @@ export default function PaymentPage() {
   const [selectedCard, setSelectedCard] = useState('visa');
 
   const cardOptions = [
-  { id: 'visa', src: '/images/visa.png', alt: 'Visa' },
-  { id: 'mastercard', src: '/images/mastercard.png', alt: 'MasterCard' },
+  { id: 'visa', src: '/public/visa.png', alt: 'Visa' },
+  { id: 'mastercard', src: '/public/mastercard.png', alt: 'MasterCard' },
 ];
 
   const handleChange = (e) => {
