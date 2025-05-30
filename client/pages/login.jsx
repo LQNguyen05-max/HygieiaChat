@@ -31,6 +31,7 @@ export default function LoginPage() {
     });
   }, []);
 
+  //Email/Pass Sign In
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -57,6 +58,8 @@ export default function LoginPage() {
     }
   };
 
+
+  //Google Sign In
   const handleGoogleSignIn = async () => {
     setError("");
     setLoading(true);
@@ -65,8 +68,9 @@ export default function LoginPage() {
       console.log('Starting Google sign in...');
       const result = await signInWithGoogle();
       console.log('Google sign in successful:', result);
-      toast.success('Signed in with Google successfully');
-      router.push("/dashboard");
+      const userProfile = await getUserProfile(result.uid);
+      toast.success(`Welcome, ${userProfile?.firstName || 'there'}!`);
+      router.push("/");
     } catch (error) {
       console.error('Google sign in error:', error);
       setError(error.message);
