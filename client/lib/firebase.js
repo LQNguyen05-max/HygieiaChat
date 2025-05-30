@@ -140,4 +140,15 @@ export const signInWithGoogle = async () => {
   }
 };
 
+// Get user profile from Firestore
+export const getUserProfile = async (userId) => {
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    return userDoc.exists() ? userDoc.data() : null;
+  } catch (error) {
+    console.error("Error getting user profile:", error);
+    return null;
+  }
+};
+
 export { app, auth, db };
