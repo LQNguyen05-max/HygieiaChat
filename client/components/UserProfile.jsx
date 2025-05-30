@@ -3,7 +3,7 @@ import { CircleUser, Settings } from "lucide-react";
 import { auth, getUserProfile } from '../lib/firebase';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 export default function UserProfile() {
   const [showProfile, setShowProfile] = useState(false);
@@ -39,11 +39,11 @@ export default function UserProfile() {
   const handleSignOut = async () => {
     try {
       await auth.signOut();
-      toast.success('Signed out successfully');
-      router.push('/');
+      toast.success("Signed out successfully");
+      router.push("/");
     } catch (error) {
-      console.error('Error signing out:', error);
-      toast.error('Failed to sign out');
+      console.error("Error signing out:", error);
+      toast.error("Failed to sign out");
     }
   };
 

@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { signInWithEmail, signUpWithEmail, signInWithGoogle, db } from "../lib/firebase";
+import { signInWithEmail, signUpWithEmail, signInWithGoogle } from "../lib/firebase";
 import { useRouter } from "next/router";
 import toast from 'react-hot-toast';
-import { getUserProfile } from "../lib/firebase";
-import { collection, getDocs } from 'firebase/firestore';
 
 export default function LoginPage() {
   const [mode, setMode] = useState("signin");
@@ -32,74 +30,27 @@ export default function LoginPage() {
     });
   }, []);
 
-  useEffect(() => {
-    // Test Firestore connection
-    const testFirestore = async () => {
-      try {
-        console.log('Testing Firestore connection...');
-        const querySnapshot = await getDocs(collection(db, 'users'));
-        console.log('Firestore connection successful!');
-        console.log('Number of users in database:', querySnapshot.size);
-      } catch (error) {
-        console.error('Firestore connection test failed:', error);
-      }
-    };
-
-    testFirestore();
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    console.log('Starting sign in process...');
 
     try {
       if (mode === "signin") {
-        console.log('Attempting email/password sign in...');
-        const user = await signInWithEmail(email, password);
-        console.log('Sign in successful, getting user profile...');
-        const profile = await getUserProfile(user.uid);
-        console.log('User profile retrieved:', profile);
-        
-        // Show toast and wait a moment before navigation
-        toast.success(`Welcome, ${profile?.firstName || 'there'}!`);
-        console.log('Toast shown, waiting before navigation...');
-        
-        // Add a small delay to ensure toast is visible
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        console.log('Navigating to home page...');
-        await router.push("/");
-        console.log('Navigation complete');
+        await signInWithEmail(email, password);
+        toast.success('Signed in successfully');
       } else {
         if (!firstName || !lastName) {
           throw new Error('First name and last name are required');
         }
-        console.log('Attempting email/password sign up...');
-        const user = await signUpWithEmail(email, password, firstName, lastName);
-        console.log('Sign up successful');
-        
-        toast.success(`Welcome, ${firstName}!`);
-        console.log('Toast shown, waiting before navigation...');
-        
-        // Add a small delay to ensure toast is visible
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        console.log('Navigating to home page...');
-        await router.push("/");
-        console.log('Navigation complete');
+        await signUpWithEmail(email, password, firstName, lastName);
+        toast.success('Account created successfully');
       }
+      router.push("/"); // Redirect to dashboard after successful auth
     } catch (error) {
-      console.error('Authentication error:', {
-        code: error.code,
-        message: error.message,
-        fullError: error
-      });
       setError(error.message);
       toast.error(error.message);
     } finally {
-      console.log('Setting loading to false');
       setLoading(false);
     }
   };
@@ -111,10 +62,9 @@ export default function LoginPage() {
     try {
       console.log('Starting Google sign in...');
       const result = await signInWithGoogle();
-      const profile = await getUserProfile(result.uid);
       console.log('Google sign in successful:', result);
-      toast.success(`Welcome, ${profile?.firstName || 'there'}!`);
-      await router.push("/dashboard"); // Wait for navigation to complete
+      toast.success('Signed in with Google successfully');
+      router.push("/dashboard");
     } catch (error) {
       console.error('Google sign in error:', error);
       setError(error.message);
@@ -141,6 +91,11 @@ export default function LoginPage() {
             </p>
           </div>
 
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              {error}
+            </div>
+          )}
 
           {/* Tabs */}
           <div className="flex mb-8 gap-2">
@@ -212,9 +167,9 @@ export default function LoginPage() {
               <div className="bg-gray-50 p-2 rounded">
                 <div className="flex justify-between items-center mb-1">
                   <label htmlFor="password" className="text-sm font-medium">Password</label>
-                  {/* {mode === "signin" && (
+                  {mode === "signin" && (
                     <a href="#" className="text-blue-500 text-xs hover:underline">Forgot?</a>
-                  )} */}
+                  )}
                 </div>
                 <input
                   id="password"
