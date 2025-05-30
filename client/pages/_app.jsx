@@ -6,5 +6,7 @@ export default function MyApp({ Component, pageProps }) {
     <div className="flex flex-col md:flex-row min-h-screen">
       <Component {...pageProps} />
     </div>
+
+    
   );
 }
