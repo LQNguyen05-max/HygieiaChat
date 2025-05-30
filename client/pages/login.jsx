@@ -3,6 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signInWithEmail, signUpWithEmail, signInWithGoogle } from "../lib/firebase";
 import { useRouter } from "next/router";
 import toast from 'react-hot-toast';
+import { getUserProfile } from "../lib/firebase";
 
 export default function LoginPage() {
   const [mode, setMode] = useState("signin");
@@ -37,8 +38,9 @@ export default function LoginPage() {
 
     try {
       if (mode === "signin") {
-        await signInWithEmail(email, password);
-        toast.success('Signed in successfully');
+        const user = await signInWithEmail(email, password);
+        const userProfile = await getUserProfile(user.uid);
+        toast.success(`Welcome, ${userProfile?.firstName || 'there'}!`);
       } else {
         if (!firstName || !lastName) {
           throw new Error('First name and last name are required');

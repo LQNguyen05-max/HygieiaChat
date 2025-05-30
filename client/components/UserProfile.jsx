@@ -81,7 +81,7 @@ export default function UserProfile() {
         
         <Link 
           href="/account"
-          className="flex items-center justify-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          className="flex items-left justify-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           onClick={() => setShowProfile(false)}
         >
           <Settings size={16} className="mr-2" />
@@ -90,7 +90,7 @@ export default function UserProfile() {
         
         <button
           onClick={handleSignOut}
-          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+          className="flex items-left justify-left block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
         >
           Sign Out
         </button>
