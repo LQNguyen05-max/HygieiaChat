@@ -230,7 +230,7 @@ export default function Home() {
                     className="w-full rounded-full bg-mint-700 text-white hover:bg-mint-800"
                   >
                     <Link href="/payment?plan=Pro">
-                      <button className="select-button">Subscribe Now</button>
+                      Subscribe Now
                     </Link>
                   </Button>
                 </CardFooter>

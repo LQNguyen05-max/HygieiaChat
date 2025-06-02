@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 export default function SubscriptionPage() {
@@ -12,15 +12,28 @@ export default function SubscriptionPage() {
     "Become a rizzler sigma",
   ];
 
-  const plans = {
+  const [plans] = useState({
     Free: [true, true, false, false, false],
     Pro: [true, false, true, true, true],
-  };
+  });
+
+  useEffect(() => {
+    const storedPlan = localStorage.getItem("chosePlan");
+    if (storedPlan) {
+      setChosenPlan(storedPlan);
+    }
+  }, []);
 
   const handlePlan = (plan) => {
     setChosenPlan(plan);
-    alert(`You have selected the ${plan} plan!`);
-    router.push(`/payment?plan=${plan}`);
+
+    localStorage.setItem("chosePlan", plan);
+
+    if (plan === "Free") {
+      router.push("/");
+    } else {
+      router.push(`/payment?plan=${plan}`);
+    }
   };
 
   return (
@@ -61,12 +74,18 @@ export default function SubscriptionPage() {
                 <td></td>
                 {Object.keys(plans).map((plan) => (
                   <td key={plan} className="p-4">
-                    <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded-r"
-                      onClick={() => handlePlan(plan)}
-                    >
-                      Select {plan}
-                    </button>
+                    {chosenPlan === "Free" && plan === "Free" ? (
+                      <span className="text-grey-500 font-semibold">
+                        You have this already!
+                      </span>
+                    ) : (
+                      <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded-r"
+                        onClick={() => handlePlan(plan)}
+                      >
+                        Select {plan}
+                      </button>
+                    )}
                   </td>
                 ))}
               </tr>
