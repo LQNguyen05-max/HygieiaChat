@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -7,17 +7,9 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-//Processing keys from environment variables
+// Firebase config from environment variables
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -29,85 +21,100 @@ const firebaseConfig = {
 };
 
 // Debug: Log the actual config being used
-if (typeof window !== 'undefined') {
-  console.log('Firebase Config being used:', {
+if (typeof window !== "undefined") {
+  console.log("Firebase Config being used:", {
     apiKey: firebaseConfig.apiKey,
     authDomain: firebaseConfig.authDomain,
     projectId: firebaseConfig.projectId,
   });
 }
 
-// Initialize Firebase
+// Initialize Firebase safely
 let app;
-let auth;
-let db;
-let googleProvider;
-
-try {
+if (!getApps().length) {
   app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-  googleProvider = new GoogleAuthProvider();
-  console.log('Firebase initialized successfully');
-} catch (error) {
-  console.error('Error initializing Firebase:', error);
-  throw error;
+} else {
+  app = getApp();
 }
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
 
 // Function to get user-friendly error messages
 const getFriendlyErrorMessage = (error) => {
   switch (error.code) {
-    case 'auth/invalid-email':
-      return 'Invalid email address';
-    case 'auth/user-disabled':
-      return 'This account has been disabled';
-    case 'auth/user-not-found':
-    case 'auth/wrong-password':
-      return 'Invalid email or password';
-    case 'auth/email-already-in-use':
-      return 'This email is already registered';
-    case 'auth/weak-password':
-      return 'Password should be at least 6 characters';
-    case 'auth/operation-not-allowed':
-      return 'This operation is not allowed';
-    case 'auth/network-request-failed':
-      return 'Network error. Please check your connection';
-    case 'auth/too-many-requests':
-      return 'Too many attempts. Please try again later';
-    case 'auth/popup-closed-by-user':
-      return 'Sign in was cancelled';
-    case 'auth/cancelled-popup-request':
-      return 'Sign in was cancelled';
-    case 'auth/popup-blocked':
-      return 'Pop-up was blocked. Please allow pop-ups for this site';
+    case "auth/invalid-email":
+      return "Invalid email address";
+    case "auth/user-disabled":
+      return "This account has been disabled";
+    case "auth/user-not-found":
+    case "auth/wrong-password":
+      return "Invalid email or password";
+    case "auth/email-already-in-use":
+      return "This email is already registered";
+    case "auth/weak-password":
+      return "Password should be at least 6 characters";
+    case "auth/operation-not-allowed":
+      return "This operation is not allowed";
+    case "auth/network-request-failed":
+      return "Network error. Please check your connection";
+    case "auth/too-many-requests":
+      return "Too many attempts. Please try again later";
+    case "auth/popup-closed-by-user":
+      return "Sign in was cancelled";
+    case "auth/cancelled-popup-request":
+      return "Sign in was cancelled";
+    case "auth/popup-blocked":
+      return "Pop-up was blocked. Please allow pop-ups for this site";
     default:
-      return 'An error occurred. Please try again';
+      return "An error occurred. Please try again";
   }
 };
 
 // Email/Password Sign In
 export const signInWithEmail = async (email, password) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     return userCredential.user;
   } catch (error) {
     console.error("Sign in error:", {
       code: error.code,
-      message: error.message
+      message: error.message,
     });
     throw new Error(getFriendlyErrorMessage(error));
   }
 };
 
-// Email/Password Sign Up
-export const signUpWithEmail = async (email, password) => {
+// Email/Password Sign Up (with displayName support)
+export const signUpWithEmail = async (email, password, firstName, lastName) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    if (userCredential.user) {
+      await updateProfile(userCredential.user, {
+        displayName: `${firstName} ${lastName}`,
+      });
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        email,
+        firstName,
+        lastName,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
     return userCredential.user;
   } catch (error) {
     console.error("Sign up error:", {
       code: error.code,
-      message: error.message
+      message: error.message,
     });
     throw new Error(getFriendlyErrorMessage(error));
   }
@@ -117,33 +124,42 @@ export const signUpWithEmail = async (email, password) => {
 export const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    
+
     // Check if user profile exists, if not create it
     const userProfile = await getUserProfile(result.user.uid);
     if (!userProfile) {
-      const nameParts = result.user.displayName?.split(' ') || ['', ''];
+      const nameParts = result.user.displayName?.split(" ") || ["", ""];
       await createUserProfile(result.user.uid, {
         email: result.user.email,
         firstName: nameParts[0],
-        lastName: nameParts.slice(1).join(' '),
-        createdAt: new Date().toISOString()
+        lastName: nameParts.slice(1).join(" "),
+        createdAt: new Date().toISOString(),
       });
     }
-    
+
     return result.user;
   } catch (error) {
     console.error("Google sign in error:", {
       code: error.code,
-      message: error.message
+      message: error.message,
     });
     throw error;
+  }
+};
+
+// Create user profile in Firestore
+export const createUserProfile = async (userId, profile) => {
+  try {
+    await setDoc(doc(db, "users", userId), profile);
+  } catch (error) {
+    console.error("Error creating user profile:", error);
   }
 };
 
 // Get user profile from Firestore
 export const getUserProfile = async (userId) => {
   try {
-    const userDoc = await getDoc(doc(db, 'users', userId));
+    const userDoc = await getDoc(doc(db, "users", userId));
     return userDoc.exists() ? userDoc.data() : null;
   } catch (error) {
     console.error("Error getting user profile:", error);

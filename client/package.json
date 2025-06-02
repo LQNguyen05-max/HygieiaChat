@@ -12,11 +12,18 @@
     "dev:tailwind": "concurrently \"npm run tailwind:watch\" \"npm run dev\""
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tailwindcss/forms": "^0.5.10",
+    "class-variance-authority": "^0.7.1",
+    "firebase": "^11.8.1",
     "lucide-react": "^0.511.0",
     "next": "15.3.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.0"
+    "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.6.0",
+    "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
     "@types/node": "22.15.21",
