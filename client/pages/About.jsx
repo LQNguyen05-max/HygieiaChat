@@ -96,15 +96,16 @@ const About = () => {
       </div>
       {/* Right: Full Background Image & Description */}
       <div
-        className="flex-1 h-screen relative overflow-hidden"
+        className="flex-1 h-screen relative overflow-hidden transition-all duration-1000"
         ref={rightRef}
         tabIndex={0}
         style={{ outline: "none" }}
       >
         <img
+          key={current}
           src={slides[current].image}
           alt={slides[current].title}
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover animate-fade-in`}
         />
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-black bg-opacity-20" />
