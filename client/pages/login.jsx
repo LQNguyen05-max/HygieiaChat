@@ -70,27 +70,22 @@ export default function LoginPage() {
     }
   };
 
-  //Google Sign In
-  const handleGoogleSignIn = async () => {
+   //Google Sign In
+   const handleGoogleSignIn = async () => {
     setError("");
-    setLoading(true);
 
     try {
-      console.log("Starting Google sign in...");
       const result = await signInWithGoogle();
-      console.log("Google sign in successful:", result);
       const userProfile = await getUserProfile(result.uid);
       toast.success(`Welcome ${userProfile?.firstName || "there"}!`);
       router.push("/");
     } catch (error) {
-      console.error("Google sign in error:", error);
-      setError(error.message);
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
+      if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+        setError(error.message);
+        toast.error(error.message);
+      }
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       {/* Optional: background blur or color blobs */}
@@ -255,8 +250,7 @@ export default function LoginPage() {
           {/* Google Sign In */}
           <button
             onClick={handleGoogleSignIn}
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 font-medium py-2.5 rounded-lg text-base transition-colors duration-150 mt-6 mb-8 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 font-medium py-2.5 rounded-lg text-base transition-colors duration-150 mt-6 mb-8"
           >
             <FcGoogle className="w-5 h-5" /> Sign in with Google
           </button>
