@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { CircleUser, Settings } from "lucide-react";
-import { auth, getUserProfile } from '../lib/firebase';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { toast } from 'react-hot-toast';
+import { auth, getUserProfile } from "../lib/firebase";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { toast } from "react-hot-toast";
 
 export default function UserProfile() {
   const [showProfile, setShowProfile] = useState(false);
@@ -18,7 +18,7 @@ export default function UserProfile() {
           const profile = await getUserProfile(auth.currentUser.uid);
           setUserProfile(profile);
         } catch (error) {
-          console.error('Error loading user profile:', error);
+          console.error("Error loading user profile:", error);
         }
       }
     }
@@ -32,9 +32,20 @@ export default function UserProfile() {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleSignIn = async () => {
+    try {
+      await auth.signIn();
+      toast.success("Signed in successfully");
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing in:", error);
+      toast.error("Failed to sign in");
+    }
+  };
 
   const handleSignOut = async () => {
     try {
@@ -57,12 +68,12 @@ export default function UserProfile() {
         <CircleUser size={30} className="text-gray-700" />
       </button>
 
-      <div 
+      <div
         style={{
           opacity: showProfile ? 1 : 0,
-          transform: showProfile ? 'translateY(0)' : 'translateY(-10px)',
-          transition: 'all 0.2s ease-out',
-          pointerEvents: showProfile ? 'auto' : 'none'
+          transform: showProfile ? "translateY(0)" : "translateY(-10px)",
+          transition: "all 0.2s ease-out",
+          pointerEvents: showProfile ? "auto" : "none",
         }}
         className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
       >
@@ -75,11 +86,13 @@ export default function UserProfile() {
               <p className="text-xs text-gray-500">{auth.currentUser?.email}</p>
             </>
           ) : (
-            <p className="text-sm font-medium text-gray-900">{auth.currentUser?.email}</p>
+            <p className="text-sm font-medium text-gray-900">
+              {auth.currentUser?.email}
+            </p>
           )}
         </div>
-        
-        <Link 
+
+        <Link
           href="/account"
           className="flex items-left justify-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           onClick={() => setShowProfile(false)}
@@ -87,7 +100,7 @@ export default function UserProfile() {
           <Settings size={16} className="mr-2" />
           Settings
         </Link>
-        
+
         <button
           onClick={handleSignOut}
           className="flex items-left justify-left block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"

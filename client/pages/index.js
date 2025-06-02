@@ -1,14 +1,22 @@
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { Sparkles, Check, Crown, Zap } from "lucide-react";
-
+import { Sparkles, Check, Crown, Zap, Subscript } from "lucide-react";
+import SubscriptionPage from "../components/Subscription";
 
 //HygieiaChat Features
 const features = [
   {
     title: "24/7 Availability",
-    description: "HygieiaChat is always online, so you can access its services whenever you need to.",
+    description:
+      "HygieiaChat is always online, so you can access its services whenever you need to.",
     icon: (
       <svg
         className="w-6 h-6 text-mint-700"
@@ -28,7 +36,8 @@ const features = [
   },
   {
     title: "Simple Chatbot Interface",
-    description: "Our chatbot is easy-to-use, making it simple to ask a variety of health-related questions.",
+    description:
+      "Our chatbot is easy-to-use, making it simple to ask a variety of health-related questions.",
     icon: (
       <svg
         className="w-6 h-6 text-mint-700"
@@ -48,7 +57,8 @@ const features = [
   },
   {
     title: "AI-Powered Learning",
-    description: "Trained on GPT-4 technology, our chatbot searches for verified health research papers to provide you with accurate answers.",
+    description:
+      "Trained on GPT-4 technology, our chatbot searches for verified health research papers to provide you with accurate answers.",
     icon: (
       <svg
         className="w-6 h-6 text-mint-700"
@@ -81,11 +91,13 @@ export default function Home() {
                 Health Advice Made Instantaneous
               </h1>
               <p className="text-xl mb-8 text-gray-600">
-                Access HygieiaChat today for quick, reliable health advice for your needs.
+                Access HygieiaChat today for quick, reliable health advice for
+                your needs.
               </p>
-              <Link 
+              <Link
                 href="/chat"
-                className="inline-block hover:shadow-lg border-2 bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors">
+                className="inline-block hover:shadow-lg border-2 bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors"
+              >
                 Try HygieiaChat Now
               </Link>
             </div>
@@ -100,127 +112,134 @@ export default function Home() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {features.map((feature, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow bg-white border-gray-200">
+                <Card
+                  key={index}
+                  className="hover:shadow-lg transition-shadow bg-white border-gray-200"
+                >
                   <CardHeader>
                     <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                       {feature.icon}
                     </div>
-                    <CardTitle className="text-xl font-semibold text-gray-800">{feature.title}</CardTitle>
+                    <CardTitle className="text-xl font-semibold text-gray-800">
+                      {feature.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-gray-600">{feature.description}</CardDescription>
+                    <CardDescription className="text-gray-600">
+                      {feature.description}
+                    </CardDescription>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
         </section>
-        
+
         {/* Pricing Section */}
-          <section className="relative py-24 ">
-            <div className="absolute -right-40 top-20 -z-10 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[100px]"></div>
-            <div className="absolute -left-40 bottom-20 -z-10 h-[400px] w-[400px] rounded-full bg-secondary/10 blur-[100px]"></div>
+        <section className="relative py-24 ">
+          <div className="absolute -right-40 top-20 -z-10 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[100px]"></div>
+          <div className="absolute -left-40 bottom-20 -z-10 h-[400px] w-[400px] rounded-full bg-secondary/10 blur-[100px]"></div>
 
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="mb-16 text-center">
-                <h2 className="mb-3 text-3xl font-bold md:text-4xl">
-                  Choose Your Plan
-                </h2>
-                <p className="mx-auto max-w-2xl text-muted-foreground">
-                  Select the perfect plan for your transcription needs. Upgrade anytime as your
-                  requirements grow.
-                </p>
-              </div>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-16 text-center">
+              <h2 className="mb-3 text-3xl font-bold md:text-4xl">
+                Choose Your Plan
+              </h2>
+              <p className="mx-auto max-w-2xl text-muted-foreground">
+                Select the perfect plan for your transcription needs. Upgrade
+                anytime as your requirements grow.
+              </p>
+            </div>
 
-              <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
-
-                {/* Free Tier */}
-                <Card className="glass-effect border-2 transition-all duration-300 hover:shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-2xl">
-                      <Sparkles className="mr-2 h-5 w-5 text-secondary" />
-                      Free
-                    </CardTitle>
-                    <CardDescription>For casual users</CardDescription>
-                    <div className="mt-6">
-                      <span className="text-5xl font-bold">$0</span>
-                      <span className="text-muted-foreground">/month</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <ul className="space-y-3">
-                      {[
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
-                        'Feature 4',
-                      ].map((feature, i) => (
+            <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
+              {/* Free Tier */}
+              <Card className="glass-effect border-2 transition-all duration-300 hover:shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Sparkles className="mr-2 h-5 w-5 text-secondary" />
+                    Free
+                  </CardTitle>
+                  <CardDescription>For casual users</CardDescription>
+                  <div className="mt-6">
+                    <span className="text-5xl font-bold">$0</span>
+                    <span className="text-muted-foreground">/month</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <ul className="space-y-3">
+                    {["Feature 1", "Feature 2", "Feature 3", "Feature 4"].map(
+                      (feature, i) => (
                         <li key={i} className="flex items-center">
                           <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10">
                             <Check className="h-3 w-3 text-secondary" />
                           </div>
                           <span>{feature}</span>
                         </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="w-full rounded-full hover:bg-secondary/5"
-                    >
-                      <Link href="/login?mode=signup">Sign Up</Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
+                      )
+                    )}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full rounded-full hover:bg-secondary/5"
+                  >
+                    <Link href="/login?mode=signup">Sign Up</Link>
+                  </Button>
+                </CardFooter>
+              </Card>
 
-                {/* Pro Tier */}
-                <Card className="glass-effect relative border-2 border-mint-700/30 shadow-lg shadow-mint-700/10 transition-all duration-300 hover:border-mint-700/50 hover:shadow-xl">
-                  <div className="absolute -right-3 -top-3 rounded-full border border-mint-700/20 bg-gradient-to-r from-mint-700 to-mint-800 px-3 py-1 text-xs font-medium text-white shadow-sm">
-                    Most Popular
+              {/* Pro Tier */}
+              <Card className="glass-effect relative border-2 border-mint-700/30 shadow-lg shadow-mint-700/10 transition-all duration-300 hover:border-mint-700/50 hover:shadow-xl">
+                <div className="absolute -right-3 -top-3 rounded-full border border-mint-700/20 bg-gradient-to-r from-mint-700 to-mint-800 px-3 py-1 text-xs font-medium text-white shadow-sm">
+                  Most Popular
+                </div>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Crown className="mr-2 h-5 w-5 text-mint-700" />
+                    Pro
+                  </CardTitle>
+                  <CardDescription>For based sigmas</CardDescription>
+                  <div className="mt-6">
+                    <span className="text-5xl font-bold">$5,000.99</span>
+                    <span className="text-muted-foreground">/month</span>
                   </div>
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-2xl">
-                      <Crown className="mr-2 h-5 w-5 text-mint-700" />
-                      Pro
-                    </CardTitle>
-                    <CardDescription>For based sigmas</CardDescription>
-                    <div className="mt-6">
-                      <span className="text-5xl font-bold">$5,000.99</span>
-                      <span className="text-muted-foreground">/month</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <ul className="space-y-3">
-                      {[
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
-                        'Bottom Text',
-                        'Idk',
-                      ].map((feature, i) => (
-                        <li key={i} className="flex items-center">
-                          <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-mint-700/15 border border-mint-700/30">
-                            <Zap className="h-3 w-3 text-mint-700" />
-                          </div>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button
-                      asChild
-                      className="w-full rounded-full bg-mint-700 text-white hover:bg-mint-800"
-                    >
-                      <Link href="/login?mode=signup">Get Started</Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </div>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <ul className="space-y-3">
+                    {[
+                      "Feature 1",
+                      "Feature 2",
+                      "Feature 3",
+                      "Bottom Text",
+                      "Idk",
+                    ].map((feature, i) => (
+                      <li key={i} className="flex items-center">
+                        <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-mint-700/15 border border-mint-700/30">
+                          <Zap className="h-3 w-3 text-mint-700" />
+                        </div>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    asChild
+                    className="w-full rounded-full bg-mint-700 text-white hover:bg-mint-800"
+                  >
+                    <Link href="/payment?plan=Pro">
+                      <button className="select-button">Subscribe Now</button>
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
             </div>
-          </section>
+          </div>
+        </section>
+
+        <SubscriptionPage />
 
         {/* Call to Action Section */}
         <section className="py-20 bg-gradient-to-r from-mint-200 to-mint-300">
@@ -229,10 +248,10 @@ export default function Home() {
               Ready to Receive Reliable Health Advice?
             </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
-              Create an account today to make the most out of HygieiaChat's convenient services.
+              Create an account today to make the most out of HygieiaChat's
+              convenient services.
             </p>
             <div className="flex gap-4 justify-center">
-
               <Link
                 href="/login?mode=signup"
                 className="hover:shadow-lg border-2 bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors"
@@ -251,9 +270,12 @@ export default function Home() {
             <div className="flex flex-row justify-between items-start">
               {/* Company Name and Description*/}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">HygieiaChat</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  HygieiaChat
+                </h3>
                 <p className="text-sm text-gray-500 mb-3">
-                  Providing reliable health advice through advanced AI technology.
+                  Providing reliable health advice through advanced AI
+                  technology.
                 </p>
               </div>
 

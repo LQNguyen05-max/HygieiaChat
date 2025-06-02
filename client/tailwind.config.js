@@ -51,9 +51,7 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms')
-  ],
+  plugins: [require("@tailwindcss/forms")],
   // Add these options for CLI
   corePlugins: {
     preflight: true,
