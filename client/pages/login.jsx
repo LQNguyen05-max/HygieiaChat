@@ -7,15 +7,24 @@ import {
 } from "../lib/firebase";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import { getUserProfile } from "../lib/firebase";
 
 export default function LoginPage() {
   const [mode, setMode] = useState("signin");
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    // Set initial mode from query parameter
+    if (router.query.mode === "signup") {
+      setMode("signup");
+    }
+  }, [router.query]);
 
   useEffect(() => {
     // Debug: Check if environment variables are loaded
@@ -34,6 +43,7 @@ export default function LoginPage() {
     });
   }, []);
 
+  //Email/Pass Sign In
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -41,10 +51,14 @@ export default function LoginPage() {
 
     try {
       if (mode === "signin") {
-        await signInWithEmail(email, password);
-        toast.success("Signed in successfully");
+        const user = await signInWithEmail(email, password);
+        const userProfile = await getUserProfile(user.uid);
+        toast.success(`Welcome ${userProfile?.firstName || "there"}!`);
       } else {
-        await signUpWithEmail(email, password, name);
+        if (!firstName || !lastName) {
+          throw new Error("First name and last name are required");
+        }
+        await signUpWithEmail(email, password, firstName, lastName);
         toast.success("Account created successfully");
       }
       router.push("/"); // Redirect to dashboard after successful auth
@@ -56,15 +70,20 @@ export default function LoginPage() {
     }
   };
 
+  //Google Sign In
   const handleGoogleSignIn = async () => {
     setError("");
     setLoading(true);
 
     try {
-      await signInWithGoogle();
-      toast.success("Signed in with Google successfully");
-      router.push("/dashboard");
+      console.log("Starting Google sign in...");
+      const result = await signInWithGoogle();
+      console.log("Google sign in successful:", result);
+      const userProfile = await getUserProfile(result.uid);
+      toast.success(`Welcome ${userProfile?.firstName || "there"}!`);
+      router.push("/");
     } catch (error) {
+      console.error("Google sign in error:", error);
       setError(error.message);
       toast.error(error.message);
     } finally {
@@ -84,10 +103,7 @@ export default function LoginPage() {
       >
         <div className="flex-1 flex flex-col">
           <div className="flex flex-col items-center mb-4">
-            <h1 className="text-3xl font-bold text-blue-700 mb-1">
-              HygieiaChat
-            </h1>
-            <h2 className="text-xl font-bold text-center mb-1">
+            <h2 className="text-2xl font-bold text-center mb-1">
               {mode === "signin" ? "Welcome back" : "Create your account"}
             </h2>
             <p className="text-center text-gray-500 text-sm">
@@ -96,6 +112,7 @@ export default function LoginPage() {
             </p>
           </div>
 
+          {/* Error Message */}
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
               {error}
@@ -133,26 +150,46 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="mb-6">
             <div className="space-y-8 mb-8">
-              {/* added the name category into the sign up */}
               {mode === "signup" && (
-                <div className="bg-gray-50 p-2 rounded">
-                  <label
-                    className="block mb-1 text-sm font-medium"
-                    htmlFor="name"
-                  >
-                    Name
-                  </label>
-                  <input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="John Doe"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
-                    required
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 p-2 rounded">
+                    <label
+                      className="block mb-1 text-sm font-medium"
+                      htmlFor="firstName"
+                    >
+                      First Name
+                    </label>
+                    <input
+                      id="firstName"
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="John"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      required={mode === "signup"}
+                    />
+                  </div>
+                  <div className="bg-gray-50 p-2 rounded">
+                    <label
+                      className="block mb-1 text-sm font-medium"
+                      htmlFor="lastName"
+                    >
+                      Last Name
+                    </label>
+                    <input
+                      id="lastName"
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="Doe"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      required={mode === "signup"}
+                    />
+                  </div>
                 </div>
               )}
+
+              {/* Email and Password Inputs */}
               <div className="bg-gray-50 p-2 rounded">
                 <label
                   className="block mb-1 text-sm font-medium"
