@@ -97,6 +97,7 @@ export default function LoginPage() {
             </p>
           </div>
 
+          {/* Error Message */}
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
               {error}
@@ -158,6 +159,8 @@ export default function LoginPage() {
                   </div>
                 </div>
               )}
+
+              {/* Email and Password Inputs */}
               <div className="bg-gray-50 p-2 rounded">
                 <label className="block mb-1 text-sm font-medium" htmlFor="email">Email</label>
                 <input

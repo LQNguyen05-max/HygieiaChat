@@ -11,6 +11,7 @@ export default function UserProfile() {
   const dropdownRef = useRef(null);
   const router = useRouter();
 
+  //Loads the user profile from firebase
   useEffect(() => {
     async function loadUserProfile() {
       if (auth.currentUser) {
@@ -25,6 +26,7 @@ export default function UserProfile() {
     loadUserProfile();
   }, []);
 
+  //Closes profile dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -36,6 +38,8 @@ export default function UserProfile() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+
+  //Sign Out Function
   const handleSignOut = async () => {
     try {
       await auth.signOut();
@@ -47,6 +51,7 @@ export default function UserProfile() {
     }
   };
 
+  //User Profile Component
   return (
     <div className="relative" ref={dropdownRef}>
       <button
