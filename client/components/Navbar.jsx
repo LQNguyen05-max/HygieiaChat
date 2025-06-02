@@ -16,6 +16,8 @@ export function Navbar() {
     return () => unsubscribe();
   }, []);
 
+
+  //Navbar styling
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b">
       <div className="container mx-auto px-4">
@@ -24,7 +26,7 @@ export function Navbar() {
             <span className="text-xl font-bold text-mint-700">HygieiaChat</span>
           </Link>
 
-          {/* Middle Navigation */}
+          {/* Middle Navigation - Chat, About, Contact */}
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/chat"
@@ -51,7 +53,7 @@ export function Navbar() {
             {user ? (
               <UserProfile />
             ) : (
-              <Link href="/login">
+              <Link href="/login?mode=signin">
                 <Button className="bg-mint-700 text-white hover:bg-mint-800">
                   Sign In
                 </Button>

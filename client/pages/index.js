@@ -1,12 +1,22 @@
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { Sparkles, Check, Crown, Zap } from "lucide-react";
+import { Sparkles, Check, Crown, Zap, Subscript } from "lucide-react";
+import SubscriptionPage from "../components/Subscription";
 
+//HygieiaChat Features
 const features = [
   {
     title: "24/7 Availability",
-    description: "HygieiaChat is always online, so you can access its services whenever you need to.",
+    description:
+      "HygieiaChat is always online, so you can access its services whenever you need to.",
     icon: (
       <svg
         className="w-6 h-6 text-mint-700"
@@ -26,7 +36,8 @@ const features = [
   },
   {
     title: "Simple Chatbot Interface",
-    description: "Our chatbot is easy-to-use, making it simple to ask a variety of health-related questions.",
+    description:
+      "Our chatbot is easy-to-use, making it simple to ask a variety of health-related questions.",
     icon: (
       <svg
         className="w-6 h-6 text-mint-700"
@@ -46,7 +57,8 @@ const features = [
   },
   {
     title: "AI-Powered Learning",
-    description: "Trained on GPT-4 technology, our chatbot searches for verified health research papers to provide you with accurate answers.",
+    description:
+      "Trained on GPT-4 technology, our chatbot searches for verified health research papers to provide you with accurate answers.",
     icon: (
       <svg
         className="w-6 h-6 text-mint-700"
@@ -68,52 +80,62 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative h-[600px] bg-gray-50">
-        <div className="container mx-auto px-4 h-full flex items-center">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl font-bold mb-6 text-gray-900">
-              Health Advice Made Instantaneous
-            </h1>
-            <p className="text-xl mb-8 text-gray-600">
-              Access HygieiaChat today for quick, reliable health advice for your needs.
-            </p>
-            <Link 
-              href="/chat"
-              className="inline-block hover:shadow-lg border-2 bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors">
-              Try HygieiaChat Now
-            </Link>
+    <div className="min-h-screen flex flex-col">
+      {/* Main content */}
+      <div className="flex-1">
+        {/* Hero Section */}
+        <section className="relative h-[600px] bg-gray-50">
+          <div className="container mx-auto px-4 h-full flex items-center">
+            <div className="max-w-2xl">
+              <h1 className="text-5xl font-bold mb-6 text-gray-900">
+                Health Advice Made Instantaneous
+              </h1>
+              <p className="text-xl mb-8 text-gray-600">
+                Access HygieiaChat today for quick, reliable health advice for
+                your needs.
+              </p>
+              <Link
+                href="/chat"
+                className="inline-block hover:shadow-lg border-2 bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors"
+              >
+                Try HygieiaChat Now
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gradient-to-r from-mint-300 to-mint-200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
-            Why Choose HygieiaChat?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow bg-white border-gray-200">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                    {feature.icon}
-                  </div>
-                  <CardTitle className="text-xl font-semibold text-gray-800">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-gray-600">{feature.description}</CardDescription>
-                </CardContent>
-              </Card>
-            ))}
+        {/* Features Section */}
+        <section className="py-20 bg-gradient-to-r from-mint-300 to-mint-200">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+              Why Choose HygieiaChat?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {features.map((feature, index) => (
+                <Card
+                  key={index}
+                  className="hover:shadow-lg transition-shadow bg-white border-gray-200"
+                >
+                  <CardHeader>
+                    <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      {feature.icon}
+                    </div>
+                    <CardTitle className="text-xl font-semibold text-gray-800">
+                      {feature.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-gray-600">
+                      {feature.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-      
-      {/* Pricing Section */}
+        </section>
 
+        {/* Pricing Section */}
         <section className="relative py-24 ">
           <div className="absolute -right-40 top-20 -z-10 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[100px]"></div>
           <div className="absolute -left-40 bottom-20 -z-10 h-[400px] w-[400px] rounded-full bg-secondary/10 blur-[100px]"></div>
@@ -124,8 +146,8 @@ export default function Home() {
                 Choose Your Plan
               </h2>
               <p className="mx-auto max-w-2xl text-muted-foreground">
-                Select the perfect plan for your transcription needs. Upgrade anytime as your
-                requirements grow.
+                Select the perfect plan for your transcription needs. Upgrade
+                anytime as your requirements grow.
               </p>
             </div>
 
@@ -145,19 +167,16 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <ul className="space-y-3">
-                    {[
-                      'Feature 1',
-                      'Feature 2',
-                      'Feature 3',
-                      'Feature 4',
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-center">
-                        <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10">
-                          <Check className="h-3 w-3 text-secondary" />
-                        </div>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
+                    {["Feature 1", "Feature 2", "Feature 3", "Feature 4"].map(
+                      (feature, i) => (
+                        <li key={i} className="flex items-center">
+                          <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10">
+                            <Check className="h-3 w-3 text-secondary" />
+                          </div>
+                          <span>{feature}</span>
+                        </li>
+                      )
+                    )}
                   </ul>
                 </CardContent>
                 <CardFooter>
@@ -166,7 +185,7 @@ export default function Home() {
                     variant="outline"
                     className="w-full rounded-full hover:bg-secondary/5"
                   >
-                    <Link href="/login">Sign Up</Link>
+                    <Link href="/login?mode=signup">Sign Up</Link>
                   </Button>
                 </CardFooter>
               </Card>
@@ -190,11 +209,11 @@ export default function Home() {
                 <CardContent className="flex-grow">
                   <ul className="space-y-3">
                     {[
-                      'Feature 1',
-                      'Feature 2',
-                      'Feature 3',
-                      'Bottom Text',
-                      'Idk',
+                      "Feature 1",
+                      "Feature 2",
+                      "Feature 3",
+                      "Bottom Text",
+                      "Idk",
                     ].map((feature, i) => (
                       <li key={i} className="flex items-center">
                         <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-mint-700/15 border border-mint-700/30">
@@ -210,7 +229,9 @@ export default function Home() {
                     asChild
                     className="w-full rounded-full bg-mint-700 text-white hover:bg-mint-800"
                   >
-                    <Link href="/login">Get Started</Link>
+                    <Link href="/payment?plan=Pro">
+                      <button className="select-button">Subscribe Now</button>
+                    </Link>
                   </Button>
                 </CardFooter>
               </Card>
@@ -218,31 +239,56 @@ export default function Home() {
           </div>
         </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-mint-200 to-mint-300">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">
-            Ready to Receive Reliable Health Advice?
-          </h2>
-          <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
-            Create an account today to make the most out of HygieiaChat's convenient services.
-          </p>
-          <div className="flex gap-4 justify-center">
-            {/* <Link
-              href="/contact"
-              className="bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors"
-            >
-              Contact Us
-            </Link> */}
-            <Link
-              href="/login"
-              className="hover:shadow-lg border-2 bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors"
-            >
-              Sign Up Today
-            </Link>
+        <SubscriptionPage />
+
+        {/* Call to Action Section */}
+        <section className="py-20 bg-gradient-to-r from-mint-200 to-mint-300">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              Ready to Receive Reliable Health Advice?
+            </h2>
+            <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
+              Create an account today to make the most out of HygieiaChat's
+              convenient services.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/login?mode=signup"
+                className="hover:shadow-lg border-2 bg-mint-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-mint-800 transition-colors"
+              >
+                Sign Up Today
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="w-full bg-white border-t border-gray-200 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-16">
+            <div className="flex flex-row justify-between items-start">
+              {/* Company Name and Description*/}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  HygieiaChat
+                </h3>
+                <p className="text-sm text-gray-500 mb-3">
+                  Providing reliable health advice through advanced AI
+                  technology.
+                </p>
+              </div>
+
+              {/*Copyright */}
+              <div className="flex items-center">
+                <p className="text-sm text-gray-500">
+                  © 2025 HygieiaChat. All rights reserved.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }
