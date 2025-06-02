@@ -3,7 +3,7 @@ import { Navbar } from "../components/Navbar";
 import Head from "next/head";
 import { Toaster } from 'react-hot-toast';
 
-// Create a custom App component to include which wraps the entire application in our
+// Create a custom App component which wraps the entire application in our Navbar and generates toast notifications where applicable
 export default function MyApp({ Component, pageProps }) {
   return (
     <div className="min-h-screen bg-white">
