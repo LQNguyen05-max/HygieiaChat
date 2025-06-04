@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { CircleUser, Settings } from "lucide-react";
-import { auth, getUserProfile } from "../lib/firebase";
+import { auth, getUserProfile, updateUserProfile } from "../lib/firebase";
 import { useRouter } from "next/router";
-import Link from "next/link";
+// import Link from "next/link";
 import { toast } from "react-hot-toast";
 
 export default function UserProfile() {
   const [showProfile, setShowProfile] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [modalContent, setModalContent] = useState(null); // State to track modal content
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal visibility
   const dropdownRef = useRef(null);
   const router = useRouter();
 
@@ -38,7 +40,6 @@ export default function UserProfile() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
   //Sign Out Function
   const handleSignOut = async () => {
     try {
@@ -51,7 +52,43 @@ export default function UserProfile() {
     }
   };
 
-  //User Profile Component
+  // Modal Account Settings
+  const closeModal = () => {
+    setModalContent(null);
+    setIsModalOpen(false);
+  };
+
+  const openModal = (content) => {
+    setModalContent(content);
+    setIsModalOpen(true);
+  };
+
+  const handleAccountSettingsUpdate = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const updatedProfile = {
+      firstName: formData.get("firstName")?.trim(),
+      lastName: formData.get("lastName")?.trim(),
+    };
+    console.log("First Name:", userProfile?.firstName);
+    console.log("Last Name:", userProfile?.lastName);
+
+    try {
+      // Update the profile in Firestore
+      await updateUserProfile(auth.currentUser.uid, updatedProfile);
+      // Reload the updated profile from Firestore
+      const profile = await getUserProfile(auth.currentUser.uid);
+      // console.log("Updated Profile:", profile);
+      setUserProfile(profile); // Update the local state with the latest profile
+      toast.success("Account settings updated successfully");
+      closeModal();
+    } catch (error) {
+      console.error("Error updating account settings:", error);
+      toast.error("Failed to update account settings");
+    }
+  };
+
+  // User Profile Component
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -85,15 +122,76 @@ export default function UserProfile() {
             </p>
           )}
         </div>
-
-        <Link
-          href="/account"
-          className="flex items-left justify-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          onClick={() => setShowProfile(false)}
-        >
-          <Settings size={16} className="mr-2" />
-          Settings
-        </Link>
+        <div>
+          <button
+            onClick={() => openModal("accountSettings")}
+            type="button"
+            className="account-settings flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition-colors"
+          >
+            <Settings size={20} />
+            <span className="text-sm font-medium text-gray-900">
+              Account Settings
+            </span>
+          </button>
+          {isModalOpen && modalContent === "accountSettings" && (
+            <div className="account-settings-popup">
+              <div className="account-settings-popup-header">
+                Account Settings
+              </div>
+              <form onSubmit={handleAccountSettingsUpdate}>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    defaultValue={userProfile?.firstName || ""}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    defaultValue={userProfile?.lastName || ""}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    defaultValue={auth.currentUser?.email || ""}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    disabled
+                  />
+                </div>
+                <div className="account-settings-popup-buttons">
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="account-settings-popup-button cancel"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="account-settings-popup-button save"
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
 
         <button
           onClick={handleSignOut}
