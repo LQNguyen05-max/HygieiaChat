@@ -308,17 +308,17 @@ h1, h2, h3, h4, h5, h6 {
 /* Medical Receipt Button */
 .medical-chatbot-receipt-btn {
   color: #38bdf8;
-  padding: 0.5rem;           /* Add padding for a larger clickable area */
-  border-radius: 0.5rem;     /* Rounded corners */
+  padding: 0.5rem;           
+  border-radius: 0.5rem;     
   transition: color 0.2s, background 0.2s;
-  display: inline-flex;      /* Keeps icon centered in the area */
+  display: inline-flex;      
   align-items: center;
   justify-content: center;
 }
 
 .medical-chatbot-receipt-btn:hover {
   color: #0369a1;
-  background: #e0f2fe;      /* Light blue background */
+  background: #e0f2fe;      
   cursor: pointer;
 }
 
@@ -334,7 +334,6 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
   animation: fadeIn 0.3s
 }
 
@@ -365,7 +364,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .modal-btn:disabled {
-  background: #a7f3d0; /* mint-200 */
+  background: #a7f3d0;
   color: #6b7280;
   cursor: not-allowed;
 }
@@ -424,7 +423,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Toast container styles */
 .toast-container {
   position: fixed;
-  top: 80px !important; /* Adjust this value to move toasts down */
+  top: 80px !important; 
   right: 20px;
   z-index: 100;
 }
@@ -456,6 +455,13 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center
 }
 
+.payment-container > .title {
+  font-size: 2rem;
+  font-weight: 700;
+  color:black;
+  margin-bottom: 1.5rem;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -471,7 +477,7 @@ h1, h2, h3, h4, h5, h6 {
 .payment-form button {
   margin-top: 1rem;
   padding: 0.75rem;
-  background-color: #3b82f6; /* blue-500 */
+  background-color: #3b82f6; 
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -482,7 +488,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .payment-form button:hover {
-  background-color: #2563eb; /* blue-600 */
+  background-color: #2563eb; 
 }
 
 .payment-form button {
@@ -564,12 +570,12 @@ label.quarter {
 }
 
 .card-option.selected {
-  border-color: #3b82f6; /* blue-500 */
-  background-color: #eff6ff; /* light blue background */
+  border-color: #3b82f6; 
+  background-color: #eff6ff; 
 }
 
 .select-button {
-  background-color: #3b82f6; /* blue-500 */
+  background-color: #3b82f6; 
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
@@ -579,7 +585,58 @@ label.quarter {
 }
 
 .error-text {
-  color: #dc2626; /* red-600 */
+  color: #dc2626;
   font-size: 0.875rem;
   margin-top: 0.25rem;
+}
+
+/* Account Setting Container */
+.account-settings-popup {
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  width: 300px; 
+}
+
+.account-settings-popup-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.account-settings-popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.account-settings-popup-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.account-settings-popup-button.cancel {
+  background-color: #e5e7eb;
+}
+
+.account-settings-popup-button.cancel:hover {
+  background-color: #d1d5db;
+}
+
+.account-settings-popup-button.save {
+  background-color: #16a34a; 
+  color: white;
+}
+
+.account-settings-popup-button.save:hover {
+  background-color: #15803d;
 }

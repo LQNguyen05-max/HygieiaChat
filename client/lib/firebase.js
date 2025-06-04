@@ -7,7 +7,13 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 // Firebase config from environment variables
 const firebaseConfig = {
@@ -158,12 +164,28 @@ export const createUserProfile = async (userId, profile) => {
 
 // Get user profile from Firestore
 export const getUserProfile = async (userId) => {
+  // console.log("Getting user profile for:", userId);
   try {
     const userDoc = await getDoc(doc(db, "users", userId));
-    return userDoc.exists() ? userDoc.data() : null;
+    const profile = userDoc.exists() ? userDoc.data() : null
+    return profile;
   } catch (error) {
     console.error("Error getting user profile:", error);
     return null;
+  }
+};
+
+// Update user profile in Firestore
+export const updateUserProfile = async (uid, profileData) => {
+  // console.log("Updating user profile with data:", uid, profileData);
+  try {
+    const userRef = doc(db, "users", uid);
+    await updateDoc(userRef, profileData);
+    // console.log("Profile updated in firestone:", profileData);
+    return true;
+  } catch (error) {
+    // console.error("Error updating user profile:", error);
+    throw new Error(getFriendlyErrorMessage(error));
   }
 };
 

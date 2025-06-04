@@ -1775,6 +1775,11 @@ select {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
+.text-yellow-500 {
+  --tw-text-opacity: 1;
+  color: rgb(234 179 8 / var(--tw-text-opacity, 1));
+}
+
 .underline-offset-4 {
   text-underline-offset: 4px;
 }
@@ -2222,12 +2227,9 @@ h1, h2, h3, h4, h5, h6 {
 .medical-chatbot-receipt-btn {
   color: #38bdf8;
   padding: 0.5rem;
-  /* Add padding for a larger clickable area */
   border-radius: 0.5rem;
-  /* Rounded corners */
   transition: color 0.2s, background 0.2s;
   display: inline-flex;
-  /* Keeps icon centered in the area */
   align-items: center;
   justify-content: center;
 }
@@ -2235,7 +2237,6 @@ h1, h2, h3, h4, h5, h6 {
 .medical-chatbot-receipt-btn:hover {
   color: #0369a1;
   background: #e0f2fe;
-  /* Light blue background */
   cursor: pointer;
 }
 
@@ -2248,10 +2249,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 100vw;
   height: 100vh;
   background: rgba(0,0,0,0.4);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
   animation: fadeIn 0.3s
 }
 
@@ -2283,7 +2284,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .modal-btn:disabled {
   background: #a7f3d0;
-  /* mint-200 */
   color: #6b7280;
   cursor: not-allowed;
 }
@@ -2347,7 +2347,6 @@ h1, h2, h3, h4, h5, h6 {
 .toast-container {
   position: fixed;
   top: 80px !important;
-  /* Adjust this value to move toasts down */
   right: 20px;
   z-index: 100;
 }
@@ -2380,6 +2379,13 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center
 }
 
+.payment-container > .title {
+  font-size: 2rem;
+  font-weight: 700;
+  color:black;
+  margin-bottom: 1.5rem;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -2396,7 +2402,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1rem;
   padding: 0.75rem;
   background-color: #3b82f6;
-  /* blue-500 */
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -2408,7 +2413,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .payment-form button:hover {
   background-color: #2563eb;
-  /* blue-600 */
 }
 
 .payment-form button {
@@ -2492,14 +2496,11 @@ label.quarter {
 
 .card-option.selected {
   border-color: #3b82f6;
-  /* blue-500 */
   background-color: #eff6ff;
-  /* light blue background */
 }
 
 .select-button {
   background-color: #3b82f6;
-  /* blue-500 */
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
@@ -2510,9 +2511,60 @@ label.quarter {
 
 .error-text {
   color: #dc2626;
-  /* red-600 */
   font-size: 0.875rem;
   margin-top: 0.25rem;
+}
+
+/* Account Setting Container */
+
+.account-settings-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  width: 300px;
+}
+
+.account-settings-popup-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.account-settings-popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.account-settings-popup-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.account-settings-popup-button.cancel {
+  background-color: #e5e7eb;
+}
+
+.account-settings-popup-button.cancel:hover {
+  background-color: #d1d5db;
+}
+
+.account-settings-popup-button.save {
+  background-color: #16a34a;
+  color: white;
+}
+
+.account-settings-popup-button.save:hover {
+  background-color: #15803d;
 }
 
 .placeholder\:text-muted-foreground::-moz-placeholder {
@@ -2577,6 +2629,11 @@ label.quarter {
   .hover\:bg-gray-100:hover {
     --tw-bg-opacity: 1;
     background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+  }
+
+  .hover\:bg-gray-300:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
   }
 
   .hover\:bg-mint-100:hover {
@@ -2685,6 +2742,64 @@ label.quarter {
 
 .disabled\:opacity-50:disabled {
   opacity: 0.5;
+}
+
+.dark\:border-gray-700:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(55 65 81 / var(--tw-border-opacity, 1));
+}
+
+.dark\:bg-gray-700:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1));
+}
+
+.dark\:bg-gray-800:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
+}
+
+.dark\:bg-gray-900:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
+}
+
+.dark\:bg-mint-600:is(.dark *) {
+  background-color: var(--mint-600);
+}
+
+.dark\:text-gray-100:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(243 244 246 / var(--tw-text-opacity, 1));
+}
+
+.dark\:text-gray-300:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+}
+
+.dark\:text-mint-400:is(.dark *) {
+  color: var(--mint-400);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dark\:hover\:bg-gray-600:hover:is(.dark *) {
+    --tw-bg-opacity: 1;
+    background-color: rgb(75 85 99 / var(--tw-bg-opacity, 1));
+  }
+
+  .dark\:hover\:bg-gray-800:hover:is(.dark *) {
+    --tw-bg-opacity: 1;
+    background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
+  }
+
+  .dark\:hover\:bg-mint-500:hover:is(.dark *) {
+    background-color: var(--mint-500);
+  }
+
+  .dark\:hover\:text-mint-400:hover:is(.dark *) {
+    color: var(--mint-400);
+  }
 }
 
 @media (min-width: 640px) {

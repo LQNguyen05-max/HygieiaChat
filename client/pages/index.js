@@ -8,8 +8,10 @@ import {
   CardFooter,
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { Sparkles, Check, Crown, Zap, Subscript } from "lucide-react";
+import { Sparkles, Check, Crown, Zap } from "lucide-react";
 import SubscriptionPage from "../components/Subscription";
+import { useState, useEffect } from "react";
+import { set } from "react-hook-form";
 
 //HygieiaChat Features
 const features = [
@@ -79,6 +81,20 @@ const features = [
 ];
 
 export default function Home() {
+  const [subscription, setSubscription] = useState(null);
+
+  useEffect(() => {
+    const savedSubscription = localStorage.getItem("subscription");
+    setSubscription(savedSubscription);
+
+
+    if (savedSubscription) {
+      console.log("Subscription found:", savedSubscription);
+    } else {
+      console.log("No subscription found.");
+    }
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Main content */}
@@ -225,14 +241,18 @@ export default function Home() {
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button
-                    asChild
-                    className="w-full rounded-full bg-mint-700 text-white hover:bg-mint-800"
-                  >
-                    <Link href="/payment?plan=Pro">
-                      Subscribe Now
-                    </Link>
-                  </Button>
+                  {subscription === "Pro" ? (
+                    <div className="w-full rounded-full bg-gray-200 text-gray-700 text-center py-3 font-semibold">
+                      You have this subscription saved
+                    </div>
+                  ) : (
+                    <Button
+                      asChild
+                      className="w-full rounded-full bg-mint-700 text-white hover:bg-mint-800"
+                    >
+                      <Link href="/payment?plan=Pro">Subscribe Now</Link>
+                    </Button>
+                  )}
                 </CardFooter>
               </Card>
             </div>

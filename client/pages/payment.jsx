@@ -40,8 +40,17 @@ export default function PaymentPage() {
       return;
     }
 
+    // User token, replace it with actual token with JWT or any auth token
+    const isLoggedIn = localStorage.getItem("userToken");
+    if (!isLoggedIn) {
+      alert("You must be logged in to make a payment.");
+      return;
+    }
+    // Process payment logic here
+    localStorage.setItem("subscription", "Pro");
+
     alert(`Payment processed successfully with ${selectedCard}!`);
-    router.push("/success");
+    router.push("/");
   };
 
   const openModal = (content) => {
@@ -68,7 +77,7 @@ export default function PaymentPage() {
 
   return (
     <main className="payment-container">
-      <h1 className="title">Secure Checkout</h1>
+      <h1 className="title">Checkout</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="payment-form-split">
         <div className="card-options" style={{ display: "flex", gap: "1rem" }}>
           {cardOptions.map((card) => (
@@ -229,10 +238,11 @@ export default function PaymentPage() {
         <div className="modal">
           <div className="modal-content">
             <h2>{modalContent}</h2>
+            <h1>{new Date().toLocaleDateString("en-US", {month: "long", day: "numeric", year: "numeric"})}</h1>
             <p>
               {modalContent === "Terms of Service"
-                ? "By using this service, you agree to make the payment through HygieiaChat, you agree to the following Terms of Service. If you do not agree to these terms, please do not proceed with the transaction."
-                : "Here is the privacy policy. We value your privacy and ensure that your data is protected and used responsibly."}
+                ? "By using this service, you agree to make the payment through HygieiaChat, you agree to the following Terms of Service. If you do not agree to these terms, please do not proceed with the transaction. "
+                : "This Privacy Policy addresses HygieiaChat collects, uses, and protects your personal information when you make a payment. By using this service, you consent to the data practices described in this policy. Do you wish to proceed?"}  
             </p>
             {modalContent === "Terms of Service" && (
               <div>
