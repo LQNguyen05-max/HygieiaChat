@@ -41,11 +41,13 @@ export default function UserProfile() {
   }, []);
 
   //Sign Out Function
-  const handleSignOut = async () => {
+  const handleLogout = async () => {
     try {
-      await auth.signOut();
-      toast.success("Signed out successfully");
-      router.push("/");
+      await auth.signOut(); // Firebase sign-out
+      localStorage.removeItem("jwtToken"); // Remove token from localStorage
+      console.log("Removed Token from Local Storage");
+      router.push("/login"); // Redirect to login page
+      toast.success("Signed out successfully!");
     } catch (error) {
       console.error("Error signing out:", error);
       toast.error("Failed to sign out");
@@ -194,7 +196,7 @@ export default function UserProfile() {
         </div>
 
         <button
-          onClick={handleSignOut}
+          onClick={handleLogout}
           className="flex items-left justify-left block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
         >
           Sign Out

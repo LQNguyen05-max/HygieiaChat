@@ -8,6 +8,7 @@ import {
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { getUserProfile } from "../lib/firebase";
+import { fetchWithAuth } from "../lib/authApi";
 
 export default function LoginPage() {
   const [mode, setMode] = useState("signin");
@@ -19,13 +20,44 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const [jwtToken, setJwtToken] = useState("");
+
+  // fetch protected data using JWT token
+  // This function will be called after successful login
+  const fetchProtectedData = async () => {
+    const token = localStorage.getItem("jwtToken");
+    // console.log("Stored Token in Local Storage:", token);
+
+    if (!token) {
+      console.warn("No JWT token found in local storage. Please log in.");
+      return;
+    }
+
+    try {
+      const data = await fetchWithAuth("http://localhost:5000/api/protected");
+      console.log("Protected Data:", data);
+    } catch (error) {
+      console.error("Error fetching protected data:", error);
+    }
+  };
+
+  // Set initial mode based on query parameter
   useEffect(() => {
     // Set initial mode from query parameter
     if (router.query.mode === "signup") {
       setMode("signup");
     }
   }, [router.query]);
+  // Retrieve JWT token from local storage on component mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem("jwtToken");
 
+    if (storedToken) {
+      console.log("Retrieved Token from Local Storage:", storedToken);
+      setJwtToken(storedToken);
+    }
+  }, []);
+  // Debugginng Firebase Environment variables
   useEffect(() => {
     // Debug: Check if environment variables are loaded
     console.log("Environment Variables in Login Page:", {
@@ -53,8 +85,12 @@ export default function LoginPage() {
       if (mode === "signin") {
         const user = await signInWithEmail(email, password);
         const userProfile = await getUserProfile(user.uid);
+        await handleLogin(email, password);
         toast.success(`Welcome ${userProfile?.firstName || "there"}!`);
-      } else {
+      } else if (mode === "signout") {
+        handleLogout(); // Call the logout function
+        toast.success("Logged out successfully!");
+      } else if (mode === "signup") {
         if (!firstName || !lastName) {
           throw new Error("First name and last name are required");
         }
@@ -70,8 +106,68 @@ export default function LoginPage() {
     }
   };
 
-   //Google Sign In
-   const handleGoogleSignIn = async () => {
+  // Handle Login
+  const handleLogin = async (email, password) => {
+    try {
+      setLoading(true);
+      console.log("Request Body:", { email, password });
+
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      console.log("Full Response:", response); 
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Login failed");
+      }
+
+      const data = await response.json();
+      console.log("Parsed Data:", data);
+
+      const token = data.token;
+
+      if (!token) {
+        throw new Error("No token received from server");
+      }
+
+      localStorage.setItem("jwtToken", token);
+      setJwtToken(token);
+      console.log(
+        "Stored Token in Local Storage:",
+        localStorage.getItem("jwtToken")
+      );
+
+      // fetch protected data
+      fetchProtectedData();
+      // toast.success("Login successful!");
+      router.push("/");
+    } catch (error) {
+      console.error("Login Error:", error);
+      setError(error.message);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Handle Logout
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken");
+    // console.log("Removed Token from Local Storage");
+    setJwtToken("");
+    // console.log("JWT Token cleared from state", jwtToken);
+    // console.log("Redirecting to login page...");
+    router.push("/login");
+    toast.success("Logged out successfully!");
+  };
+
+  //Google Sign In
+  const handleGoogleSignIn = async () => {
     setError("");
 
     try {
@@ -80,12 +176,16 @@ export default function LoginPage() {
       toast.success(`Welcome ${userProfile?.firstName || "there"}!`);
       router.push("/");
     } catch (error) {
-      if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+      if (
+        error.code !== "auth/popup-closed-by-user" &&
+        error.code !== "auth/cancelled-popup-request"
+      ) {
         setError(error.message);
         toast.error(error.message);
       }
     }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden">
       {/* Optional: background blur or color blobs */}
