@@ -4,6 +4,13 @@ require("dotenv").config();
 // Import necessary modules
 const express = require("express");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+// const { getApp } = require("firebase/app");
+const { auth } = require("./lib/firebase");
+const { signInWithEmailAndPassword } = require("firebase/auth");
+
 const { OpenAI } = require("openai");
 
 // Initialize Express app
@@ -20,6 +27,41 @@ const openai = new OpenAI({
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Imported protected routes to server files
+const protectedRoutes = require("./routes/protected");
+app.use("/api/protected", protectedRoutes);
+
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+
+    // Generate JWT Token
+    const token = jwt.sign(
+      {
+        uid: user.uid,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+    // console.log("Generate Token:", token);
+
+    res.json({ token });
+  } catch (error) {
+    console.error("Login Error:", error);
+    res.status(401).json({ error: "Invalid email or password." });
+  }
+});
 
 // POST route: Handles user message and returns GPT response
 app.post("/api/responses", async (req, res) => {
