@@ -1,23 +1,23 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
-  const [status, setStatus] = useState({ type: 'idle', message: '' });
+  const [status, setStatus] = useState({ type: "idle", message: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus({ type: 'loading', message: 'Sending message...' });
+    setStatus({ type: "loading", message: "Sending message..." });
 
     try {
-      const response = await fetch('http://localhost:5000/api/contact', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -25,13 +25,19 @@ export default function ContactPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setStatus({ type: 'success', message: 'Message sent successfully!' });
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setStatus({ type: "success", message: "Message sent successfully!" });
+        setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
-        setStatus({ type: 'error', message: data.error || 'Failed to send message' });
+        setStatus({
+          type: "error",
+          message: data.error || "Failed to send message",
+        });
       }
     } catch (error) {
-      setStatus({ type: 'error', message: 'An error occurred. Please try again.' });
+      setStatus({
+        type: "error",
+        message: "An error occurred. Please try again.",
+      });
     }
   };
 
@@ -39,10 +45,16 @@ export default function ContactPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="w-full max-w-xl px-4">
         <h1 className="text-3xl font-bold text-center mb-8">Contact Us</h1>
-        
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-md rounded-lg p-6"
+        >
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="name"
+            >
               Name
             </label>
             <input
@@ -50,13 +62,18 @@ export default function ContactPage() {
               id="name"
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -64,13 +81,18 @@ export default function ContactPage() {
               id="email"
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="subject">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="subject"
+            >
               Subject
             </label>
             <input
@@ -78,13 +100,18 @@ export default function ContactPage() {
               id="subject"
               type="text"
               value={formData.subject}
-              onChange={(e) => setFormData({...formData, subject: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, subject: e.target.value })
+              }
               required
             />
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="message"
+            >
               Message
             </label>
             <textarea
@@ -92,7 +119,9 @@ export default function ContactPage() {
               id="message"
               rows="5"
               value={formData.message}
-              onChange={(e) => setFormData({...formData, message: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, message: e.target.value })
+              }
               required
             />
           </div>
@@ -106,12 +135,20 @@ export default function ContactPage() {
             </button>
           </div>
 
-          {status.type !== 'idle' && (
-            <div className={`mt-4 p-4 rounded-md ${
-              status.type === 'success' ? 'bg-green-50 text-green-800' :
-              status.type === 'error' ? 'bg-red-50 text-red-800' :
-              'bg-blue-50 text-blue-800'
-            }`}>
+          {status.type !== "idle" && (
+            <div
+              className={`mt-4 p-4 rounded-md text-center ${
+                status.type === "success"
+                  ? "bg-green-700 text-white"
+                  : status.type === "error"
+                  ? "bg-red-700 text-white"
+                  : "bg-blue-700 text-white"
+              }`}
+              style={{
+                marginTop: "1rem",
+                width: "100%",
+              }}
+            >
               {status.message}
             </div>
           )}

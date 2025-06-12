@@ -63,7 +63,7 @@ router.post('/', limiter, async (req, res) => {
         <p>For any further questions, please contact us at hygieiachat@gmail.com</p>
         <br> </br>
         <p>Best regards,</p>
-        <p>The HygieiaBot Team</p>
+        <p>The HygieiaChat Team</p>
       `
     });
 

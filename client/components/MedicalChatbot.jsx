@@ -4,7 +4,7 @@ import { Send, Pencil, Trash2, Paperclip, Mail } from "lucide-react";
 function generateReceiptEmailHTML(chatLog) {
   return `
     <div style="font-family:sans-serif;">
-      <h2>Chat Receipt</h2>
+      <h1 style="color:#333;">Medical Chatbot Receipt</h1>
       <div>
         ${
           chatLog.length === 0
