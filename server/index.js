@@ -30,7 +30,10 @@ app.use(express.json());
 
 // Imported protected routes to server files
 const protectedRoutes = require("./routes/protected");
+const contactRoutes = require("./routes/contact");
+
 app.use("/api/protected", protectedRoutes);
+app.use("/api/contact", contactRoutes);
 
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
