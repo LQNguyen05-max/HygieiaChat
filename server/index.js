@@ -136,9 +136,9 @@ app.post("/api/send-receipt", async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"HygieiaBot" <${process.env.EMAIL_USER}>`,
+      from: `"HygieiaChat" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "ChatBot Receipt - HygieiaBot",
+      subject: "HygieiaChat - Chat Receipt",
       html: receipt,
     });
     res.json({ success: true, message: "Receipt sent successfully." });
