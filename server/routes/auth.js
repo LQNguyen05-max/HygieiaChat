@@ -1,25 +1,36 @@
 const express = require("express");
-const admin = require("../config/firebaseAdmin");
+const admin = require("../config/firebaseAdmin"); // Import Firebase Admin SDK
 const jwt = require("jsonwebtoken");
 
 const router = express.Router();
-const JWT_SECRET = "super"; // Replace with a secure key
 
 router.post("/google", async (req, res) => {
   const { idToken } = req.body;
 
+  if (!idToken) {
+    return res.status(400).json({ error: "ID token is required." });
+  }
+
   try {
-    // Verify Firebase ID token
+    // Verify the Google ID token
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const { uid, email } = decodedToken;
+    // console.log("Decoded Token:", decodedToken);
 
-    // Generate JWT
-    const jwtToken = jwt.sign({ uid, email }, JWT_SECRET, { expiresIn: "1h" });
+    const { uid, email, name, picture } = decodedToken;
 
-    res.json({ jwt: jwtToken });
+    // Generate a custom JWT token for the user (optional)
+    const token = jwt.sign({ uid, email }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.json({
+      message: "Authentication successful",
+      user: { uid, email, name, picture },
+      token, // Custom JWT token
+    });
   } catch (error) {
     console.error("Error verifying ID token:", error);
-    res.status(401).json({ error: "Invalid ID token" });
+    res.status(401).json({ error: "Invalid ID token." });
   }
 });
 

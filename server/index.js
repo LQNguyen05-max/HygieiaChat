@@ -9,6 +9,7 @@ const bcrypt = require("bcrypt");
 
 // const { getApp } = require("firebase/app");
 const { auth } = require("./lib/firebase");
+const authRoutes = require("./routes/auth");
 const { signInWithEmailAndPassword } = require("firebase/auth");
 
 const { OpenAI } = require("openai");
@@ -59,6 +60,8 @@ app.use("/api/protected", protectedRoutes, authenticateJWT, (req, res) => {
 
 app.use("/api/contact", contactRoutes);
 
+app.use("/api/auth", authRoutes);
+
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -92,6 +95,7 @@ app.post("/api/login", async (req, res) => {
 
 // Firebase admin SDK initialization
 app.post("/api/auth/google", async (req, res) => {
+  console.log("Received ID Token:", req.body.idToken); // Log the received token
   const { idToken } = req.body;
 
   if (!idToken) {
@@ -100,13 +104,14 @@ app.post("/api/auth/google", async (req, res) => {
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
+    // console.log("Decoded Token:", decodedToken);
     const { uid, email } = decodedToken;
 
     const token = jwt.sign({ uid, email }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    res.json({ token }); // Return the JWT
+    res.json({ token });
   } catch (error) {
     console.error("Error verifying ID token:", error);
     res.status(401).json({ error: "Invalid ID token." });

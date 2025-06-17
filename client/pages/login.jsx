@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { signInWithEmail, signUpWithEmail, googleLogIn } from "../lib/firebase";
+import {
+  signInWithEmail,
+  signUpWithEmail,
+  googleLogIn,
+  auth,
+  googleProvider,
+} from "../lib/firebase";
+import { signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { getUserProfile } from "../lib/firebase";
@@ -36,6 +43,18 @@ export default function LoginPage() {
       console.error("Error fetching protected data:", error);
     }
   };
+
+  // Check if user is logged in and clear googleIdToken if not
+  useEffect(() => {
+    const checkUser = async () => {
+      if (!auth.currentUser) {
+        console.log("No user is logged in. Clearing googleIdToken...");
+        localStorage.removeItem("googleIdToken");
+      }
+    };
+
+    checkUser();
+  }, []);
 
   // Set initial mode based on query parameter
   useEffect(() => {
@@ -155,6 +174,9 @@ export default function LoginPage() {
   // Handle Logout
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
+    // localStorage.removeItem("googleIdToken");
+    // console.log(localStorage.getItem("googleIdToken"));
+
     // console.log("Removed Token from Local Storage");
     setJwtToken("");
     // console.log("JWT Token cleared from state", jwtToken);
@@ -163,11 +185,12 @@ export default function LoginPage() {
     toast.success("Logged out successfully!");
   };
 
-  // Handle Google Sign In
   const handleGoogleLogin = async () => {
     try {
-      const idToken = await googleLogIn();
-      console.log("Google ID Token:", idToken);
+      const result = await signInWithPopup(auth, googleProvider);
+
+      const idToken = await result.user.getIdToken();
+      // console.log("Google ID Token:", idToken);
 
       const response = await fetch("http://localhost:5000/api/auth/google", {
         method: "POST",
@@ -178,14 +201,12 @@ export default function LoginPage() {
       });
 
       const data = await response.json();
+      console.log("Backend Response:", data);
+      router.push("/");
 
-      if (response.ok) {
-        localStorage.setItem("jwtToken", data.token); // Store JWT in local storage
-        router.push("/");
-        console.log("JWT stored in local storage:", data.token);
-      } else {
-        console.error("Failed to login with Google:", data.error);
-      }
+      localStorage.setItem("jwtToken", data.token);
+      localStorage.setItem("googleIdToken", idToken);
+      // console.log("Tokens stored!");
     } catch (error) {
       console.error("Google login failed:", error);
     }
