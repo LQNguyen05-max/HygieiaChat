@@ -173,7 +173,7 @@ export const getUserProfile = async (userId) => {
   // console.log("Getting user profile for:", userId);
   try {
     const userDoc = await getDoc(doc(db, "users", userId));
-    const profile = userDoc.exists() ? userDoc.data() : null
+    const profile = userDoc.exists() ? userDoc.data() : null;
     return profile;
   } catch (error) {
     console.error("Error getting user profile:", error);
