@@ -182,7 +182,7 @@ export default function LoginPage() {
       if (response.ok) {
         localStorage.setItem("jwtToken", data.token); // Store JWT in local storage
         router.push("/");
-        // console.log("JWT stored in local storage:", data.token);
+        console.log("JWT stored in local storage:", data.token);
       } else {
         console.error("Failed to login with Google:", data.error);
       }
