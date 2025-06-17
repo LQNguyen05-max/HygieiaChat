@@ -36,12 +36,7 @@ if (typeof window !== "undefined") {
 }
 
 // Initialize Firebase safely
-let app;
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApp();
-}
+const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -153,6 +148,17 @@ export const signInWithGoogle = async () => {
   }
 };
 
+export const googleLogIn = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider); // Use the exported `auth`
+    const idToken = await result.user.getIdToken(); // Retrieve Google ID token
+    return idToken;
+  } catch (error) {
+    console.error("Google Login Error:", error);
+    throw error;
+  }
+};
+
 // Create user profile in Firestore
 export const createUserProfile = async (userId, profile) => {
   try {
@@ -189,4 +195,4 @@ export const updateUserProfile = async (uid, profileData) => {
   }
 };
 
-export { app, auth, db };
+export { app, auth, db, googleProvider };
