@@ -63,4 +63,7 @@ npm install        # or pip install -r requirements.txt
 
 # Start development server
 npm run dev        # or python app.py
+
+# Start server
+npm start
 ```
