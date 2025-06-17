@@ -17,6 +17,27 @@ const { OpenAI } = require("openai");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// JWT Key
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// Admin SDK for Firebase
+const admin = require("./config/firebaseAdmin");
+
+const authenticateJWT = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ error: "Access token is required." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(403).json({ error: "Invalid or expired token." });
+  }
+};
+
 // Setup OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -32,7 +53,10 @@ app.use(express.json());
 const protectedRoutes = require("./routes/protected");
 const contactRoutes = require("./routes/contact");
 
-app.use("/api/protected", protectedRoutes);
+app.use("/api/protected", protectedRoutes, authenticateJWT, (req, res) => {
+  res.json({ message: "Protected route accessed successfully." });
+});
+
 app.use("/api/contact", contactRoutes);
 
 app.post("/api/login", async (req, res) => {
@@ -63,6 +87,29 @@ app.post("/api/login", async (req, res) => {
   } catch (error) {
     console.error("Login Error:", error);
     res.status(401).json({ error: "Invalid email or password." });
+  }
+});
+
+// Firebase admin SDK initialization
+app.post("/api/auth/google", async (req, res) => {
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    return res.status(400).json({ error: "ID token is required." });
+  }
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { uid, email } = decodedToken;
+
+    const token = jwt.sign({ uid, email }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.json({ token }); // Return the JWT
+  } catch (error) {
+    console.error("Error verifying ID token:", error);
+    res.status(401).json({ error: "Invalid ID token." });
   }
 });
 

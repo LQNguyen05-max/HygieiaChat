@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
-import {
-  signInWithEmail,
-  signUpWithEmail,
-  signInWithGoogle,
-} from "../lib/firebase";
+import { signInWithEmail, signUpWithEmail, googleLogIn } from "../lib/firebase";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { getUserProfile } from "../lib/firebase";
@@ -106,7 +102,7 @@ export default function LoginPage() {
     }
   };
 
-  // Handle Login
+  // Handle Regular Login
   const handleLogin = async (email, password) => {
     try {
       setLoading(true);
@@ -120,7 +116,7 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("Full Response:", response); 
+      console.log("Full Response:", response);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -155,6 +151,7 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
   // Handle Logout
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
@@ -166,23 +163,31 @@ export default function LoginPage() {
     toast.success("Logged out successfully!");
   };
 
-  //Google Sign In
-  const handleGoogleSignIn = async () => {
-    setError("");
-
+  // Handle Google Sign In
+  const handleGoogleLogin = async () => {
     try {
-      const result = await signInWithGoogle();
-      const userProfile = await getUserProfile(result.uid);
-      toast.success(`Welcome ${userProfile?.firstName || "there"}!`);
-      router.push("/");
-    } catch (error) {
-      if (
-        error.code !== "auth/popup-closed-by-user" &&
-        error.code !== "auth/cancelled-popup-request"
-      ) {
-        setError(error.message);
-        toast.error(error.message);
+      const idToken = await googleLogIn();
+      console.log("Google ID Token:", idToken);
+
+      const response = await fetch("http://localhost:5000/api/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("jwtToken", data.token); // Store JWT in local storage
+        router.push("/");
+        // console.log("JWT stored in local storage:", data.token);
+      } else {
+        console.error("Failed to login with Google:", data.error);
       }
+    } catch (error) {
+      console.error("Google login failed:", error);
     }
   };
 
@@ -349,7 +354,7 @@ export default function LoginPage() {
 
           {/* Google Sign In */}
           <button
-            onClick={handleGoogleSignIn}
+            onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 font-medium py-2.5 rounded-lg text-base transition-colors duration-150 mt-6 mb-8"
           >
             <FcGoogle className="w-5 h-5" /> Sign in with Google
