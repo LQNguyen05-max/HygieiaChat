@@ -23,3 +23,4 @@ pnpm-debug.log*
 
 echo server/util/serviceAccount.json
 server/util/serviceAccount.json
+server/util/serviceAccount.js
