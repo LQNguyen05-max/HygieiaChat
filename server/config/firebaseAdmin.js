@@ -1,6 +1,6 @@
 // This file initializes Firebase Admin SDK for server-side operations
 const admin = require("firebase-admin");
-const serviceAccount = require("../util/serviceAccountKey.json");
+const serviceAccount = require("../util/serviceAccount.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
