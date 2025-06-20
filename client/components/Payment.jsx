@@ -14,6 +14,7 @@ export default function PaymentPage() {
   });
 
   const [selectedCard, setSelectedCard] = useState('visa');
+  const [subscribedFlag, setSubscribedFlag] = useState(false);
 
   const cardOptions = [
   { id: 'visa', src: '/public/visa.png', alt: 'Visa' },
@@ -27,7 +28,15 @@ export default function PaymentPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Payment submitted (simulated).");
+
+    if (subscribedFlag){
+      alert("You already subscribed to Premium!")
+      return;
+    }
+    
+    alert("Payment submitted (simulated). You are subscribed to Premium");
+    setSubscribedFlag(true);
+    localStorage.setItem("subscribedFlag","true")
   };
 
   return (
@@ -62,7 +71,6 @@ export default function PaymentPage() {
     />
   </label>
 </div>
-
 
           <div className="row">
             <label className="half">
