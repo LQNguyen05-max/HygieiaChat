@@ -169,7 +169,7 @@ export default function Home() {
 
             <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
               {/* Free Tier */}
-              <Card className="glass-effect border-2 transition-all duration-300 hover:shadow-lg">
+              <Card className="glass-effect border-2 transition-all duration-300 hover:shadow-lg flex flex-col">
                 <CardHeader>
                   <CardTitle className="flex items-center text-2xl">
                     <Sparkles className="mr-2 h-5 w-5 text-secondary" />
@@ -183,7 +183,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <ul className="space-y-3">
-                    {["Feature 1", "Feature 2", "Feature 3", "Feature 4"].map(
+                    {["Access to basic services", "Limited Messages per Day", "Obtain Conversation Receipts via Email"].map(
                       (feature, i) => (
                         <li key={i} className="flex items-center">
                           <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10">
@@ -207,7 +207,7 @@ export default function Home() {
               </Card>
 
               {/* Pro Tier */}
-              <Card className="glass-effect relative border-2 border-mint-700/30 shadow-lg shadow-mint-700/10 transition-all duration-300 hover:border-mint-700/50 hover:shadow-xl">
+              <Card className="glass-effect relative border-2 border-mint-700/30 shadow-lg shadow-mint-700/10 transition-all duration-300 hover:border-mint-700/50 hover:shadow-xl flex flex-col">
                 <div className="absolute -right-3 -top-3 rounded-full border border-mint-700/20 bg-gradient-to-r from-mint-700 to-mint-800 px-3 py-1 text-xs font-medium text-white shadow-sm">
                   Most Popular
                 </div>
@@ -225,11 +225,11 @@ export default function Home() {
                 <CardContent className="flex-grow">
                   <ul className="space-y-3">
                     {[
-                      "Feature 1",
-                      "Feature 2",
-                      "Feature 3",
-                      "Bottom Text",
-                      "Idk",
+                      "Acess to All Free Features",
+                      "Unlimited Messages",
+                      "Early Access to Tools",
+                      "Priority Support",
+                      "Access to Image/Vision Processing Services",
                     ].map((feature, i) => (
                       <li key={i} className="flex items-center">
                         <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-mint-700/15 border border-mint-700/30">
@@ -259,7 +259,8 @@ export default function Home() {
           </div>
         </section>
 
-        <SubscriptionPage />
+        {/* Commenting out the subscription page for now; if needed, we can modify the subscription page to be used for something else (payment page, comparison, etc) */}
+        {/* <SubscriptionPage /> */}
 
         {/* Call to Action Section */}
         <section className="py-20 bg-gradient-to-r from-mint-200 to-mint-300">
