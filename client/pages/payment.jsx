@@ -9,6 +9,7 @@ export default function PaymentPage() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal visibility
   const [isTermsAccepted, setIsTermsAccepted] = useState(false); // State to track if terms are accepted
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false); // State to track if privacy policy is accepted
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   // Router for navigation
   const router = useRouter();
@@ -27,31 +28,35 @@ export default function PaymentPage() {
     setSelectedCard(cardID); // Update the selected card state
   };
 
-  const onSubmit = (data) => {
-    if (!selectedCard) {
-      alert("Please select a card type.");
-      return;
-    }
+const onSubmit = (data) => {
+  if (!selectedCard) {
+    alert("Please select a card type.");
+    return;
+  }
 
-    if (!isTermsAccepted || !isPrivacyAccepted) {
-      alert(
-        "You must agree to the Terms of Service and Privacy Policy to proceed."
-      );
-      return;
-    }
+  if (!isTermsAccepted || !isPrivacyAccepted) {
+    alert("You must agree to the Terms of Service and Privacy Policy to proceed.");
+    return;
+  }
 
-    // User token, replace it with actual token with JWT or any auth token
-    const isLoggedIn = localStorage.getItem("userToken");
-    if (!isLoggedIn) {
-      alert("You must be logged in to make a payment.");
-      return;
-    }
-    // Process payment logic here
-    localStorage.setItem("subscription", "Pro");
+  // Debug localStorage values
+  const jwtCheck = localStorage.getItem("jwtToken");
+  const googleIdCheck = localStorage.getItem("googleIdToken");
+  console.log("JWT Token:", jwtCheck);
+  console.log("Google ID Token:", googleIdCheck);
 
-    alert(`Payment processed successfully with ${selectedCard}!`);
-    router.push("/");
-  };
+  const isLoggedIn = jwtCheck || googleIdCheck;
+  if (!isLoggedIn) {
+    alert("You must be logged in to make a payment.");
+    return;
+  }
+
+  localStorage.setItem("subscription", "Pro");
+
+  alert(`Payment processed successfully with ${selectedCard}!`);
+  setIsSubscribed(true);
+  router.push("/");
+};
 
   const openModal = (content) => {
     setModalContent(content);
