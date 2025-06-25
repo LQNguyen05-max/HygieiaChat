@@ -30,44 +30,44 @@ export default function PaymentPage() {
     setSelectedCard(cardID); // Update the selected card state
   };
 
-const onSubmit = async (data) => {
-  if (!selectedCard) {
-    alert("Please select a card type.");
-    return;
-  }
-
-  if (!isTermsAccepted || !isPrivacyAccepted) {
-    alert("You must agree to the Terms of Service and Privacy Policy to proceed.");
-    return;
-  }
-
-  // Debug localStorage values
-  const jwtCheck = localStorage.getItem("jwtToken");
-  const googleIdCheck = localStorage.getItem("googleIdToken");
-  console.log("JWT Token:", jwtCheck);
-  console.log("Google ID Token:", googleIdCheck);
-
-  const isLoggedIn = jwtCheck || googleIdCheck;
-  if (!isLoggedIn || !auth.currentUser) {
-    alert("You must be logged in to make a payment.");
-    return;
-  }
-  try{
-    const success = await updateSubscriptionStatus(auth.currentUser.uid, "Pro");
-    if (success){
-      localStorage.setItem("subscription", "Pro");
-      alert(`Payment processed successfully with ${selectedCard}!`);
-      setIsSubscribed(true);
-      router.push("/");
-    } else {
-      alert("There is an issue updating your subscription. Please try again.");
+  const onSubmit = async (data) => {
+    if (!selectedCard) {
+      alert("Please select a card type.");
+      return;
     }
-  }
-  catch (error) {
-    console.error("Subscription update error: ", error);
-    alert("An error occurred while we process your paymnt.");
-  }
-};
+
+    if (!isTermsAccepted || !isPrivacyAccepted) {
+      alert("You must agree to the Terms of Service and Privacy Policy to proceed.");
+      return;
+    }
+
+    // Debug localStorage values
+    const jwtCheck = localStorage.getItem("jwtToken");
+    const googleIdCheck = localStorage.getItem("googleIdToken");
+    console.log("JWT Token:", jwtCheck);
+    console.log("Google ID Token:", googleIdCheck);
+
+    const isLoggedIn = jwtCheck || googleIdCheck;
+    if (!isLoggedIn || !auth.currentUser) {
+      alert("You must be logged in to make a payment.");
+      return;
+    }
+    try{
+      const success = await updateSubscriptionStatus(auth.currentUser.uid, "Pro");
+      if (success){
+        localStorage.setItem("subscription", "Pro");
+        alert(`Payment processed successfully with ${selectedCard}!`);
+        setIsSubscribed(true);
+        router.push("/");
+      } else {
+        alert("There is an issue updating your subscription. Please try again.");
+      }
+    }
+    catch (error) {
+      console.error("Subscription update error: ", error);
+      alert("An error occurred while we process your paymnt.");
+    }
+  };
 
   const openModal = (content) => {
     setModalContent(content);
@@ -258,7 +258,7 @@ const onSubmit = async (data) => {
             <p>
               {modalContent === "Terms of Service"
                 ? "By using this service, you agree to make the payment through HygieiaChat, you agree to the following Terms of Service. If you do not agree to these terms, please do not proceed with the transaction. "
-                : "This Privacy Policy addresses HygieiaChat collects, uses, and protects your personal information when you make a payment. By using this service, you consent to the data practices described in this policy. Do you wish to proceed?"}  
+                : "This Privacy Policy addresses, HygieiaChat collects, uses, and protects your personal information when you make a payment. By using this service, you consent to the data practices described in this policy. Do you wish to proceed?"}  
             </p>
             {modalContent === "Terms of Service" && (
               <div>

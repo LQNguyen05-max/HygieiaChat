@@ -85,7 +85,6 @@ export default function Home() {
     const savedSubscription = localStorage.getItem("subscription");
     setSubscription(savedSubscription);
 
-
     if (savedSubscription) {
       console.log("Subscription found:", savedSubscription);
     } else {

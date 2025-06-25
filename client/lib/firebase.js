@@ -177,7 +177,6 @@ export const getUserProfile = async (userId) => {
   try {
     const userDoc = await getDoc(doc(db, "users", userId));
     const profile = userDoc.exists() ? userDoc.data() : null;
-
     if (profile) {
       if (!profile.subscription) {
         await updateUserProfile(userId, { subscription: "Free" });
