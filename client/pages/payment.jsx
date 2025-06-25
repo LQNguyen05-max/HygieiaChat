@@ -2,6 +2,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+<<<<<<< HEAD
+=======
+import { updateSubscriptionStatus } from "@/lib/firebase";
+import { auth } from "../lib/firebase";
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 
 export default function PaymentPage() {
   const [selectedCard, setSelectedCard] = useState(null); // State to track selected card
@@ -9,6 +14,10 @@ export default function PaymentPage() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal visibility
   const [isTermsAccepted, setIsTermsAccepted] = useState(false); // State to track if terms are accepted
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false); // State to track if privacy policy is accepted
+<<<<<<< HEAD
+=======
+  const [isSubscribed, setIsSubscribed] = useState(false);
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 
   // Router for navigation
   const router = useRouter();
@@ -27,6 +36,7 @@ export default function PaymentPage() {
     setSelectedCard(cardID); // Update the selected card state
   };
 
+<<<<<<< HEAD
   const onSubmit = (data) => {
     if (!selectedCard) {
       alert("Please select a card type.");
@@ -52,6 +62,46 @@ export default function PaymentPage() {
     alert(`Payment processed successfully with ${selectedCard}!`);
     router.push("/");
   };
+=======
+const onSubmit = async (data) => {
+  if (!selectedCard) {
+    alert("Please select a card type.");
+    return;
+  }
+
+  if (!isTermsAccepted || !isPrivacyAccepted) {
+    alert("You must agree to the Terms of Service and Privacy Policy to proceed.");
+    return;
+  }
+
+  // Debug localStorage values
+  const jwtCheck = localStorage.getItem("jwtToken");
+  const googleIdCheck = localStorage.getItem("googleIdToken");
+  console.log("JWT Token:", jwtCheck);
+  console.log("Google ID Token:", googleIdCheck);
+
+  const isLoggedIn = jwtCheck || googleIdCheck;
+  if (!isLoggedIn || !auth.currentUser) {
+    alert("You must be logged in to make a payment.");
+    return;
+  }
+  try{
+    const success = await updateSubscriptionStatus(auth.currentUser.uid, "Pro");
+    if (success){
+      localStorage.setItem("subscription", "Pro");
+      alert(`Payment processed successfully with ${selectedCard}!`);
+      setIsSubscribed(true);
+      router.push("/");
+    } else {
+      alert("There is an issue updating your subscription. Please try again.");
+    }
+  }
+  catch (error) {
+    console.error("Subscription update error: ", error);
+    alert("An error occurred while we process your paymnt.");
+  }
+};
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 
   const openModal = (content) => {
     setModalContent(content);

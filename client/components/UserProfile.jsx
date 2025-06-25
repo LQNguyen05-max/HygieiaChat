@@ -46,7 +46,11 @@ export default function UserProfile() {
       await auth.signOut(); // Firebase sign-out
       localStorage.removeItem("jwtToken"); // Remove token from localStorage
       localStorage.removeItem("googleIdToken"); // Remove Google ID token from localStorage
+<<<<<<< HEAD
       // localStorage.removeItem("userProfile"); // Remove user profile from localStorage
+=======
+      localStorage.removeItem("subscription");
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
       console.log("Removed Token from Local Storage");
       router.push("/login"); // Redirect to login page
       toast.success("Signed out successfully!");

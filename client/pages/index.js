@@ -9,9 +9,13 @@ import {
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Sparkles, Check, Crown, Zap } from "lucide-react";
+<<<<<<< HEAD
 import SubscriptionPage from "../components/Subscription";
 import { useState, useEffect } from "react";
 // import { set } from "react-hook-form";
+=======
+import { useState, useEffect } from "react";
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 
 //HygieiaChat Features
 const features = [

@@ -107,9 +107,18 @@ export const signUpWithEmail = async (email, password, firstName, lastName) => {
         email,
         firstName,
         lastName,
+<<<<<<< HEAD
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
+=======
+        subscription: "Free",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+      const token = await userCredential.user.getIdToken();
+      localStorage.setItem("jwtToken", token);
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
     }
     return userCredential.user;
   } catch (error) {
@@ -174,6 +183,19 @@ export const getUserProfile = async (userId) => {
   try {
     const userDoc = await getDoc(doc(db, "users", userId));
     const profile = userDoc.exists() ? userDoc.data() : null;
+<<<<<<< HEAD
+=======
+    
+    if (profile){
+      if (!profile.subscription){
+        await updateUserProfile(userId, { subscription: "Free"});
+        profile.subscription = "Free";
+      }
+
+      localStorage.setItem("subscription", profile.subscription);
+    }
+
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
     return profile;
   } catch (error) {
     console.error("Error getting user profile:", error);
@@ -195,4 +217,27 @@ export const updateUserProfile = async (uid, profileData) => {
   }
 };
 
+<<<<<<< HEAD
+=======
+// Update user subscription
+export const updateSubscriptionStatus = async (uid, newStatus) => {
+  try {
+    await updateDoc(doc(db, "users", uid), {
+      subscription: newStatus,
+      updatedAt: new Date().toISOString(),
+    });
+
+    // Sync it to localStorage
+    localStorage.setItem("subscription", newStatus);
+
+    console.log(`Updated subscription to "${newStatus}" for user ${uid}`);
+    return true;
+  } catch (error) {
+    console.error("Error updating subscription:", error);
+    return false;
+  }
+};
+
+
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 export { app, auth, db, googleProvider };

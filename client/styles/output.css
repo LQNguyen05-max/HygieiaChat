@@ -1383,16 +1383,27 @@ select {
   background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1));
 }
 
+<<<<<<< HEAD
 .bg-blue-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
 }
 
+=======
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
 }
 
+<<<<<<< HEAD
+=======
+.bg-blue-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1));
+}
+
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 .bg-card {
   background-color: hsl(var(--card));
 }
@@ -1421,9 +1432,15 @@ select {
   background-color: rgb(220 252 231 / var(--tw-bg-opacity, 1));
 }
 
+<<<<<<< HEAD
 .bg-green-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(240 253 244 / var(--tw-bg-opacity, 1));
+=======
+.bg-green-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(21 128 61 / var(--tw-bg-opacity, 1));
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 }
 
 .bg-mint-400 {
@@ -1447,6 +1464,14 @@ select {
   background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
 }
 
+<<<<<<< HEAD
+=======
+.bg-red-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity, 1));
+}
+
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 .bg-secondary {
   background-color: hsl(var(--secondary));
 }
@@ -1468,6 +1493,7 @@ select {
   background-color: rgb(255 255 255 / 0.8);
 }
 
+<<<<<<< HEAD
 .bg-blue-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1));
@@ -1483,6 +1509,8 @@ select {
   background-color: rgb(185 28 28 / var(--tw-bg-opacity, 1));
 }
 
+=======
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 .bg-opacity-0 {
   --tw-bg-opacity: 0;
 }
@@ -1738,11 +1766,14 @@ select {
   color: rgb(37 99 235 / var(--tw-text-opacity, 1));
 }
 
+<<<<<<< HEAD
 .text-blue-800 {
   --tw-text-opacity: 1;
   color: rgb(30 64 175 / var(--tw-text-opacity, 1));
 }
 
+=======
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 .text-card-foreground {
   color: hsl(var(--card-foreground));
 }
@@ -1781,11 +1812,14 @@ select {
   color: rgb(17 24 39 / var(--tw-text-opacity, 1));
 }
 
+<<<<<<< HEAD
 .text-green-800 {
   --tw-text-opacity: 1;
   color: rgb(22 101 52 / var(--tw-text-opacity, 1));
 }
 
+=======
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 .text-mint-700 {
   color: var(--mint-700);
 }
@@ -1811,11 +1845,14 @@ select {
   color: rgb(220 38 38 / var(--tw-text-opacity, 1));
 }
 
+<<<<<<< HEAD
 .text-red-800 {
   --tw-text-opacity: 1;
   color: rgb(153 27 27 / var(--tw-text-opacity, 1));
 }
 
+=======
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
 .text-secondary {
   color: hsl(var(--secondary));
 }

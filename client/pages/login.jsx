@@ -176,7 +176,11 @@ export default function LoginPage() {
     localStorage.removeItem("jwtToken");
     // localStorage.removeItem("googleIdToken");
     // console.log(localStorage.getItem("googleIdToken"));
+<<<<<<< HEAD
 
+=======
+    localStorage.removeItem("subscription");
+>>>>>>> d540ab98fbac61e6fe98d4bfc0b2284e1b1ccd9b
     // console.log("Removed Token from Local Storage");
     setJwtToken("");
     // console.log("JWT Token cleared from state", jwtToken);
