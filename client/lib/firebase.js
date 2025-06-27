@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
+  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -14,6 +15,8 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
+
+
 
 // Firebase config from environment variables
 const firebaseConfig = {
@@ -54,6 +57,8 @@ const getFriendlyErrorMessage = (error) => {
       return "Invalid email or password";
     case "auth/email-already-in-use":
       return "This email is already registered";
+    case "auth/account-exists-with-different-credential":
+      return "An account with this email already exists. Please sign in with your email and password instead.";
     case "auth/weak-password":
       return "Password should be at least 6 characters";
     case "auth/operation-not-allowed":
@@ -125,6 +130,9 @@ export const signUpWithEmail = async (email, password, firstName, lastName) => {
 };
 
 // Google Sign In
+// Note: Firebase automatically prevents users from creating a Google account 
+// with an email that's already registered with email/password authentication.
+// When this happens, Firebase throws 'auth/account-exists-with-different-credential' error.
 export const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
@@ -147,10 +155,24 @@ export const signInWithGoogle = async () => {
       code: error.code,
       message: error.message,
     });
-    throw error;
+    
+    // Handle specific error for existing email/password account
+    if (error.code === 'auth/account-exists-with-different-credential') {
+      throw new Error("An account with this email already exists. Please sign in with your email and password instead.");
+    }
+    
+    // Handle other common errors
+    if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+      throw new Error("Sign in was cancelled");
+    }
+    
+    throw new Error(getFriendlyErrorMessage(error));
   }
 };
 
+// Google Login - Returns ID token for backend authentication
+// Note: Firebase automatically prevents users from creating a Google account 
+// with an email that's already registered with email/password authentication.
 export const googleLogIn = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider); // Use the exported `auth`
@@ -158,7 +180,18 @@ export const googleLogIn = async () => {
     return idToken;
   } catch (error) {
     console.error("Google Login Error:", error);
-    throw error;
+    
+    // Handle specific error for existing email/password account
+    if (error.code === 'auth/account-exists-with-different-credential') {
+      throw new Error("An account with this email already exists. Please sign in with your email and password instead.");
+    }
+    
+    // Handle other common errors
+    if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+      throw new Error("Sign in was cancelled");
+    }
+    
+    throw new Error(getFriendlyErrorMessage(error));
   }
 };
 
@@ -219,6 +252,41 @@ export const updateSubscriptionStatus = async (uid, newStatus) => {
     return true;
   } catch (error) {
     console.error("Error updating subscription:", error);
+    return false;
+  }
+};
+
+// Check if email is already registered with email/password
+export const checkEmailExists = async (email) => {
+  try {
+    // Try to fetch sign-in methods for the email
+    const methods = await fetchSignInMethodsForEmail(auth, email);
+    return methods.length > 0;
+  } catch (error) {
+    console.error("Error checking email existence:", error);
+    return false;
+  }
+};
+
+// Get available sign-in methods for an email
+export const getSignInMethods = async (email) => {
+  try {
+    const methods = await fetchSignInMethodsForEmail(auth, email);
+    return methods;
+  } catch (error) {
+    console.error("Error getting sign-in methods:", error);
+    return [];
+  }
+};
+
+// Check if user should use email/password sign-in instead of Google
+export const shouldUseEmailPassword = async (email) => {
+  try {
+    const methods = await fetchSignInMethodsForEmail(auth, email);
+    // If the email has password authentication but not Google, suggest email/password
+    return methods.includes('password') && !methods.includes('google.com');
+  } catch (error) {
+    console.error("Error checking sign-in methods:", error);
     return false;
   }
 };

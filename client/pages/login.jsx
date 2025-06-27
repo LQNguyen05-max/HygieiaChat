@@ -7,11 +7,12 @@ import {
   auth,
   googleProvider,
 } from "../lib/firebase";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { getUserProfile } from "../lib/firebase";
 import { fetchWithAuth } from "../lib/authApi";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [mode, setMode] = useState("signin");
@@ -90,6 +91,41 @@ export default function LoginPage() {
     });
   }, []);
 
+  // Add global error handler for popup cancellation
+  useEffect(() => {
+    const originalError = window.onerror;
+    window.onerror = function(message, source, lineno, colno, error) {
+      if (error && (error.code === 'auth/popup-closed-by-user' || 
+                    error.code === 'auth/cancelled-popup-request')) {
+        console.log("Popup cancellation caught by global handler");
+        return true; // Prevent default error handling
+      }
+      if (originalError) {
+        return originalError(message, source, lineno, colno, error);
+      }
+      return false;
+    };
+
+    // Handle unhandled promise rejections
+    const originalUnhandledRejection = window.onunhandledrejection;
+    window.onunhandledrejection = function(event) {
+      if (event.reason && (event.reason.code === 'auth/popup-closed-by-user' || 
+                          event.reason.code === 'auth/cancelled-popup-request')) {
+        console.log("Popup cancellation caught by unhandled rejection handler");
+        event.preventDefault(); // Prevent default error handling
+        return;
+      }
+      if (originalUnhandledRejection) {
+        originalUnhandledRejection(event);
+      }
+    };
+
+    return () => {
+      window.onerror = originalError;
+      window.onunhandledrejection = originalUnhandledRejection;
+    };
+  }, []);
+
   //Email/Pass Sign In
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,8 +136,16 @@ export default function LoginPage() {
       if (mode === "signin") {
         const user = await signInWithEmail(email, password);
         const userProfile = await getUserProfile(user.uid);
-        await handleLogin(email, password);
+        
+        try {
+          await handleLogin(email, password);
+        } catch (backendError) {
+          console.log("Backend login failed, but user is authenticated with Firebase");
+          // User is still authenticated with Firebase, so we can proceed
+        }
+        
         toast.success(`Welcome ${userProfile?.firstName || "there"}!`);
+        router.push("/"); // Redirect to homepage after successful signin
       } else if (mode === "signout") {
         handleLogout(); // Call the logout function
         toast.success("Logged out successfully!");
@@ -111,8 +155,8 @@ export default function LoginPage() {
         }
         await signUpWithEmail(email, password, firstName, lastName);
         toast.success("Account created successfully");
+        router.push("/"); // Redirect to homepage after successful signup
       }
-      router.push("/"); // Redirect to dashboard after successful auth
     } catch (error) {
       setError(error.message);
       toast.error(error.message);
@@ -186,12 +230,39 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = async () => {
+    setLoading(true);
+    console.log("Starting Google login...");
+    
+    // Create a wrapper function that suppresses popup errors
+    const safeSignInWithPopup = async () => {
+      try {
+        return await signInWithPopup(auth, googleProvider);
+      } catch (error) {
+        if (error.code === 'auth/popup-closed-by-user' || 
+            error.code === 'auth/cancelled-popup-request') {
+          console.log("Popup cancelled - silently handling");
+          return null; // Return null instead of throwing
+        }
+        throw error; // Re-throw other errors
+      }
+    };
+    
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await safeSignInWithPopup();
+      
+      // If result is null, popup was cancelled
+      if (!result) {
+        console.log("Google login popup was cancelled");
+        setLoading(false);
+        return;
+      }
+      
+      console.log("Firebase popup successful:", result.user.email);
 
       const idToken = await result.user.getIdToken();
-      // console.log("Google ID Token:", idToken);
+      console.log("Got ID token, length:", idToken.length);
 
+      console.log("Making API call to backend...");
       const response = await fetch("http://localhost:5000/api/auth/google", {
         method: "POST",
         headers: {
@@ -200,15 +271,63 @@ export default function LoginPage() {
         body: JSON.stringify({ idToken }),
       });
 
-      const data = await response.json();
-      console.log("Backend Response:", data);
-      router.push("/");
+      console.log("Backend response status:", response.status);
+      console.log("Backend response ok:", response.ok);
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Backend error:", errorData);
+        throw new Error(errorData.error || "Google login failed");
+      }
+
+      const data = await response.json();
+      console.log("Backend Response data:", data);
+
+      if (!data.token) {
+        throw new Error("No token received from backend");
+      }
+
+      // Store tokens
+      console.log("Storing tokens...");
       localStorage.setItem("jwtToken", data.token);
       localStorage.setItem("googleIdToken", idToken);
-      // console.log("Tokens stored!");
+      setJwtToken(data.token);
+      
+      // Show success message
+      toast.success("Google login successful!");
+      
+      // Redirect to homepage
+      console.log("Redirecting to homepage...");
+      router.push("/");
     } catch (error) {
       console.error("Google login failed:", error);
+      
+      // Handle specific case where email already exists with different credential
+      if (error.message && error.message.includes("already exists")) {
+        setError("An account with this email already exists. Please sign in with your email and password instead.");
+        toast.error("Please use email/password sign-in for this account");
+        setMode("signin"); // Switch to sign-in mode
+        
+        // Try to extract email from the error or result for better UX
+        if (error.email) {
+          setEmail(error.email);
+        }
+        return;
+      }
+      
+      // Only show error if it's not a popup cancellation
+      if (error.code !== 'auth/popup-closed-by-user' && 
+          error.code !== 'auth/cancelled-popup-request') {
+        setError(error.message);
+        toast.error(error.message);
+      }
+      
+      // Fallback redirect to homepage even if backend fails
+      // User is still authenticated with Firebase
+      console.log("Backend failed, but user is authenticated. Redirecting to homepage...");
+      router.push("/");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -334,12 +453,12 @@ export default function LoginPage() {
                     Password
                   </label>
                   {mode === "signin" && (
-                    <a
-                      href="#"
+                    <Link
+                      href="/forgot"
                       className="text-blue-500 text-xs hover:underline"
                     >
                       Forgot?
-                    </a>
+                    </Link>
                   )}
                 </div>
                 <input
