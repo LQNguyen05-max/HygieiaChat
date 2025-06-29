@@ -223,7 +223,7 @@ export default function Home() {
                 <CardContent className="flex-grow">
                   <ul className="space-y-3">
                     {[
-                      "Acess to All Free Features",
+                      "Access to All Free Features",
                       "Unlimited Messages",
                       "Early Access to Tools",
                       "Priority Support",

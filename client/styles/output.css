@@ -2795,3 +2795,51 @@ label.quarter {
     padding-right: 2rem;
   }
 }
+
+.plan-panel, .payment-form-split {
+  background: #f9fafb;      /* light gray background */
+  padding: 1.5rem;          /* uniform padding */
+  border-radius: 0.5rem;    /* rounded corners */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* soft shadow */
+}
+
+.plan-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* or space-between */
+}
+
+
+.comparison-table tbody tr + tr {
+  border-top: 1px solid #e5e7eb; /* subtle divider */
+}
+
+
+/* left plan panel */
+.left-col{
+  flex:1 1 480px;
+  min-width:320px;
+}
+
+/* right payment form */
+.right-col{
+  flex:1 1 480px;
+  min-width:320px;
+}
+
+
+.comparison-table {
+  table-layout: fixed;    /* keeps columns equal */
+  border-collapse: collapse;
+  height: 100%;
+}
+.comparison-table th,
+.comparison-table td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.bg-payment {
+  background-color: #a8a8a8; /* Or whatever color you'd like */
+  min-height: 100vh;
+}

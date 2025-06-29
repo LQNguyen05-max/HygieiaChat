@@ -12,7 +12,7 @@ export default function PaymentPage() {
   const [isTermsAccepted, setIsTermsAccepted] = useState(false); // State to track if terms are accepted
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false); // State to track if privacy policy is accepted
   const [isSubscribed, setIsSubscribed] = useState(false);
-
+  const [modalType, setModalType] = useState("info");
   // Router for navigation
   const router = useRouter();
   const {
@@ -32,12 +32,12 @@ export default function PaymentPage() {
 
 const onSubmit = async (data) => {
   if (!selectedCard) {
-    alert("Please select a card type.");
+    openModal("Please select a card type.");
     return;
   }
 
   if (!isTermsAccepted || !isPrivacyAccepted) {
-    alert("You must agree to the Terms of Service and Privacy Policy to proceed.");
+    openModal("You must agree to the Terms of Service and Privacy Policy to proceed.");
     return;
   }
 
@@ -49,28 +49,28 @@ const onSubmit = async (data) => {
 
   const isLoggedIn = jwtCheck || googleIdCheck;
   if (!isLoggedIn || !auth.currentUser) {
-    alert("You must be logged in to make a payment.");
+    openModal("You must be logged in to make a payment.");
     return;
   }
   try{
     const success = await updateSubscriptionStatus(auth.currentUser.uid, "Pro");
     if (success){
       localStorage.setItem("subscription", "Pro");
-      alert(`Payment processed successfully with ${selectedCard}!`);
+      openModal(`Payment processed successfully with ${selectedCard}!`, "success");
       setIsSubscribed(true);
-      router.push("/");
     } else {
-      alert("There is an issue updating your subscription. Please try again.");
+      openModal("There is an issue updating your subscription. Please try again.");
     }
   }
   catch (error) {
     console.error("Subscription update error: ", error);
-    alert("An error occurred while we process your paymnt.");
+    openModal("An error occurred while we process your payment.");
   }
 };
 
-  const openModal = (content) => {
+  const openModal = (content, type = "info") => {
     setModalContent(content);
+    setModalType(type);
     setIsModalOpen(true);
   };
 
@@ -91,10 +91,58 @@ const onSubmit = async (data) => {
     setIsTermsAccepted(e.target.checked);
   };
 
+  const formatCardNumber = (value) =>
+  value
+    .replace(/\D/g, "")          
+    .slice(0, 16)               
+    .match(/.{1,4}/g)         
+    ?.join("-") || "";
+
   return (
-    <main className="payment-container">
+    <main className="payment-container bg-payment">
       <h1 className="title">Checkout</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="payment-form-split">
+      <div className = "flex gap-8 items-stretch max-w-5xl mx-auto">
+    <div className="left-col w-1/2 flex flex-col bg-white shadow rounded-lg p-6">
+<h3 className="text-lg font-semibold mb-4 flex-none text-center">Compare Plans</h3>
+
+    <table className="comparison-table w-full flex-1 text-center [&>tbody>tr>td]:py-4">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Free</th>
+          <th>Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Basic Access</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Priority Support</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Early Access to Tools</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Unlimited Messages</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Image/Vision Processing</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+<form onSubmit={handleSubmit(onSubmit)} className="right-col w-1/2 payment-form-split flex flex-col">
         <div className="card-options" style={{ display: "flex", gap: "1rem" }}>
           {cardOptions.map((card) => (
             <div
@@ -141,6 +189,10 @@ const onSubmit = async (data) => {
                       "Card number must follow the format XXXX-XXXX-XXXX-XXXX",
                   },
                 })}
+                onChange={(e) => {
+                  e.target.value = formatCardNumber(e.target.value);
+                  return e.target.value;
+                }}
                 className={`input ${errors.cardNumber ? "error" : ""}`}
                 placeholder="XXXX-XXXX-XXXX-XXXX"
               />
@@ -234,7 +286,8 @@ const onSubmit = async (data) => {
           <button
             type="button"
             className="link"
-            onClick={() => openModal("Terms of Service")}
+            onClick={() => openModal("Terms of Service", "terms")}
+
           >
             <strong>Terms of Service</strong>
           </button>{" "}
@@ -242,67 +295,88 @@ const onSubmit = async (data) => {
           <button
             type="button"
             className="link"
-            onClick={() => openModal("Privacy Policy")}
+            onClick={() => openModal("Privacy Policy", "privacy")}
           >
             <strong>Privacy Policy</strong>
           </button>
           .
         </p>
       </form>
+      </div>  
+{isModalOpen && (
+  <div className="modal">
+    <div className="modal-content">
+      {/* ======= TITLE ======= */}
+      {modalType === "info" ? null : <h2>{modalContent}</h2>}
 
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>{modalContent}</h2>
-            <h1>{new Date().toLocaleDateString("en-US", {month: "long", day: "numeric", year: "numeric"})}</h1>
-            <p>
-              {modalContent === "Terms of Service"
-                ? "By using this service, you agree to make the payment through HygieiaChat, you agree to the following Terms of Service. If you do not agree to these terms, please do not proceed with the transaction. "
-                : "This Privacy Policy addresses HygieiaChat collects, uses, and protects your personal information when you make a payment. By using this service, you consent to the data practices described in this policy. Do you wish to proceed?"}  
-            </p>
-            {modalContent === "Terms of Service" && (
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={isTermsAccepted}
-                    onChange={(e) => setIsTermsAccepted(e.target.checked)}
-                  />
-                  I agree to the Terms of Service
-                </label>
-              </div>
-            )}
-            {modalContent === "Privacy Policy" && (
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={isPrivacyAccepted}
-                    onChange={(e) => setIsPrivacyAccepted(e.target.checked)}
-                  />
-                  I agree to the Privacy Policy
-                </label>
-              </div>
-            )}
-            <button
-              className="select-button"
-              onClick={() => {
-                if (modalContent === "Terms of Service" && !isTermsAccepted) {
-                  alert("You must agree to the Terms of Service to proceed.");
-                  return;
-                }
-                if (modalContent === "Privacy Policy" && !isPrivacyAccepted) {
-                  alert("You must agree to the Privacy Policy to proceed.");
-                  return;
-                }
-                closeModal(); // Close the modal
-              }}
-            >
-              Accept
-            </button>
-          </div>
-        </div>
+      {/* ======= BODY ======= */}
+      {modalType === "terms" && (
+        <>
+          <p>
+            By using this service you agree to pay through HygieiaChat and to the
+            following Terms of Service. If you do not agree, please do not proceed.
+          </p>
+          <label className="block mt-4">
+            <input
+              type="checkbox"
+              checked={isTermsAccepted}
+              onChange={(e) => setIsTermsAccepted(e.target.checked)}
+            />{" "}
+            I agree to the Terms of Service
+          </label>
+        </>
       )}
+
+      {modalType === "privacy" && (
+        <>
+          <p>
+            This Privacy Policy explains how HygieiaChat collects, uses and protects
+            your data when you make a payment. By using this service you consent to
+            these practices.
+          </p>
+          <label className="block mt-4">
+            <input
+              type="checkbox"
+              checked={isPrivacyAccepted}
+              onChange={(e) => setIsPrivacyAccepted(e.target.checked)}
+            />{" "}
+            I agree to the Privacy Policy
+          </label>
+        </>
+      )}
+
+      {modalType === "info" && <p>{modalContent}</p>}
+
+      {/* ======= BUTTON ======= */}
+      <button
+        className="select-button mt-6"
+        onClick={() => {
+          if (modalType === "terms" && !isTermsAccepted) {
+            openModal("You must accept the Terms of Service to continue.");
+            return;
+          }
+          if (modalType === "privacy" && !isPrivacyAccepted) {
+            openModal("You must accept the Privacy Policy to continue.");
+            return;
+          }
+
+          if (modalType === "success") {
+            closeModal();
+            router.push("/"); 
+            return;
+          }
+
+          closeModal();
+        }}
+      >
+          {modalType === "info"    && "OK"}
+          {modalType === "terms"   && "Accept"}
+          {modalType === "privacy" && "Accept"}
+          {modalType === "success" && "OK"}
+      </button>
+    </div>
+  </div>
+)}
     </main>
   );
 }

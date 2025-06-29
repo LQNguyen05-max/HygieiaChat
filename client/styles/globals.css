@@ -640,3 +640,108 @@ label.quarter {
 .account-settings-popup-button.save:hover {
   background-color: #15803d;
 }
+
+.pay-wrapper {
+  display: flex;
+  gap: 2rem;
+  max-width: 1000px;           /* keeps things centered */
+  margin: 0 auto;
+}
+
+.plan-panel {
+  flex: 1 1 40%;               /* 40 % left column  */
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.payment-form-split {
+  flex: 1 1 60%;               /* 60 % right column */
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+}
+
+.comparison-table thead tr {
+  font-weight: 600;
+  color: #374151; /* slate-700 */
+}
+
+.comparison-table tbody tr:not(:last-child) td {
+  padding-bottom: 0.75rem;
+}
+
+/* 1️⃣ make the wrapper a row‑flex container */
+.pay-wrap{
+  display:flex;
+  gap:2rem;          /* space between the two columns            */
+  flex-wrap:wrap;    /* stacks on very narrow screens             */
+  max-width:1100px;  /* optional centering wrapper width          */
+  margin:0 auto;
+}
+
+/* TEMPORARY TEST ------------------------------------ */
+body::before{
+  content:"🔧 CSS LOADED";
+  position:fixed; top:0; left:0;
+  background:#facc15; padding:.25rem .5rem;
+  font-size:.75rem; z-index:9999;
+}
+/* ---------------------------------------------------- */
+
+
+/* 2️⃣ left column (plan panel) */
+.plan-panel{
+  flex:1 1 360px;    /* grow | shrink | preferred‑basis */
+  max-width:420px;
+}
+
+/* 3️⃣ right column (payment form)  */
+.payment-form-split{
+  flex:1 1 480px;
+  min-width:320px;   /* keeps fields usable on tablets */
+}
+
+
+/* tidy, border‑less table  */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+}
+.comparison-table th,
+.comparison-table td {
+  text-align: left;
+  padding: .55rem 0;
+}
+.comparison-table thead tr {
+  font-weight:600;
+  color:#374151;
+}
+.comparison-table tbody tr:not(:last-child) td {
+  padding-bottom:.75rem;
+}
+
+/* modal stays centered over full viewport */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* parent flexbox */
+
