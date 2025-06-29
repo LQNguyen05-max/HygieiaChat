@@ -210,21 +210,11 @@ export const getUserProfile = async (userId) => {
   try {
     const userDoc = await getDoc(doc(db, "users", userId));
     const profile = userDoc.exists() ? userDoc.data() : null;
-<<<<<<< HEAD
-    
-    if (profile){
-      if (!profile.subscription){
-        await updateUserProfile(userId, { subscription: "Free"});
-        profile.subscription = "Free";
-      }
-
-=======
     if (profile) {
       if (!profile.subscription) {
         await updateUserProfile(userId, { subscription: "Free" });
         profile.subscription = "Free";
       }
->>>>>>> 5d65a6e34015b69ab7f4d7d9e358895d8312ff65
       localStorage.setItem("subscription", profile.subscription);
     }
 
@@ -256,15 +246,8 @@ export const updateSubscriptionStatus = async (uid, newStatus) => {
       subscription: newStatus,
       updatedAt: new Date().toISOString(),
     });
-<<<<<<< HEAD
-
     // Sync it to localStorage
     localStorage.setItem("subscription", newStatus);
-
-=======
-    // Sync it to localStorage
-    localStorage.setItem("subscription", newStatus);
->>>>>>> 5d65a6e34015b69ab7f4d7d9e358895d8312ff65
     console.log(`Updated subscription to "${newStatus}" for user ${uid}`);
     return true;
   } catch (error) {
@@ -273,8 +256,6 @@ export const updateSubscriptionStatus = async (uid, newStatus) => {
   }
 };
 
-<<<<<<< HEAD
-=======
 // Check if email is already registered with email/password
 export const checkEmailExists = async (email) => {
   try {
@@ -309,6 +290,5 @@ export const shouldUseEmailPassword = async (email) => {
     return false;
   }
 };
->>>>>>> 5d65a6e34015b69ab7f4d7d9e358895d8312ff65
 
 export { app, auth, db, googleProvider };
