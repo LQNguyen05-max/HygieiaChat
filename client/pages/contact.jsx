@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,17 @@ export default function ContactPage() {
     message: "",
   });
   const [status, setStatus] = useState({ type: "idle", message: "" });
+
+  // Auto-reset status after 10 seconds for success/error messages
+  useEffect(() => {
+    if (status.type === "success" || status.type === "error") {
+      const timer = setTimeout(() => {
+        setStatus({ type: "idle", message: "" });
+      }, 10000); // 10 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [status.type]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,17 +39,20 @@ export default function ContactPage() {
       if (response.ok) {
         setStatus({ type: "success", message: "Message sent successfully!" });
         setFormData({ name: "", email: "", subject: "", message: "" });
+        toast.success("Message sent successfully!");
       } else {
         setStatus({
           type: "error",
           message: data.error || "Failed to send message",
         });
+        toast.error(data.error || "Failed to send message");
       }
     } catch (error) {
       setStatus({
         type: "error",
         message: "An error occurred. Please try again.",
       });
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -126,32 +141,29 @@ export default function ContactPage() {
             />
           </div>
 
-          <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              className="bg-mint-700 hover:bg-mint-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-            >
-              Send Message
-            </button>
+          <div className="flex items-center justify-center" style={{ width: "300px", margin: "1rem auto" }}>
+            {status.type === "idle" ? (
+              <button
+                type="submit"
+                className="bg-mint-700 hover:bg-mint-800 text-white font-bold py-3 px-3 rounded focus:outline-none focus:shadow-outline w-full"
+              >
+                Send Message
+              </button>
+            ) : (
+              <div
+                className={`p-3 rounded-md text-center ${
+                  status.type === "success"
+                    ? "bg-mint-700 text-white"
+                    : status.type === "error"
+                    ? "bg-red-700 text-white"
+                    : "bg-mint-700 text-white"
+                }`}
+                style={{ width: "300px" }}
+              >
+                {status.message}
+              </div>
+            )}
           </div>
-
-          {status.type !== "idle" && (
-            <div
-              className={`mt-4 p-4 rounded-md text-center ${
-                status.type === "success"
-                  ? "bg-green-700 text-white"
-                  : status.type === "error"
-                  ? "bg-red-700 text-white"
-                  : "bg-blue-700 text-white"
-              }`}
-              style={{
-                marginTop: "1rem",
-                width: "100%",
-              }}
-            >
-              {status.message}
-            </div>
-          )}
         </form>
       </div>
     </div>
