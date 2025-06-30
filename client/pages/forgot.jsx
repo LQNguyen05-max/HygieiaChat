@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { sendCustomPasswordResetEmail } from "../lib/firebase";
 import toast from "react-hot-toast";
 
 export default function ForgotPassword() {
@@ -18,7 +17,7 @@ export default function ForgotPassword() {
     setError("");
 
     try {
-      await sendPasswordResetEmail(auth, email);
+      await sendCustomPasswordResetEmail(email);
       toast.success("Reset email sent successfully!");
       setEmailSent(true);
     } catch (error) {
@@ -97,6 +96,20 @@ export default function ForgotPassword() {
               <p className="text-gray-600 mb-4">
                 We've sent a password reset link to <strong>{email}</strong>
               </p>
+              
+              {/* Important notice about spam folder */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p className="text-sm text-blue-800 font-medium mb-2">
+                  📧 Can't find the email?
+                </p>
+                <ul className="text-xs text-blue-700 space-y-1">
+                  <li>• Check your spam folder. If the email is there, mark it as <b>"Not Spam."</b> </li>
+                  <li>• Look for emails from <b>"HygieiaChat Password Reset"</b> or "<b>noreply@hygieiaauth.firebaseapp.com.</b>"</li>
+                  <li>• Wait 2-5 minutes - emails may take time to arrive.</li>
+                  <li>• Otherwise, please send a  message via the contact page, and we will resolve your issue soon.</li>
+                </ul>
+              </div>
+              
               <p className="text-sm text-gray-500">
                 Please check your email and follow the instructions to reset your password.
               </p>
@@ -123,3 +136,4 @@ export default function ForgotPassword() {
     </div>
   );
 }
+

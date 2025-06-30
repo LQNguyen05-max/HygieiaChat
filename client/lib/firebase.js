@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   fetchSignInMethodsForEmail,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -283,11 +284,31 @@ export const getSignInMethods = async (email) => {
 export const shouldUseEmailPassword = async (email) => {
   try {
     const methods = await fetchSignInMethodsForEmail(auth, email);
-    // If the email has password authentication but not Google, suggest email/password
-    return methods.includes('password') && !methods.includes('google.com');
+    return methods.includes("password");
   } catch (error) {
     console.error("Error checking sign-in methods:", error);
     return false;
+  }
+};
+
+// Custom password reset function with improved deliverability settings
+export const sendCustomPasswordResetEmail = async (email) => {
+  try {
+    // Send password reset email with custom action code settings
+    await sendPasswordResetEmail(auth, email, {
+      // Custom action code settings for better deliverability
+      handleCodeInApp: false,
+      // You can add URL parameters to track email opens
+      url: `${window.location.origin}/login?reset=success`,
+    });
+    
+    return { success: true };
+  } catch (error) {
+    console.error("Password reset error:", {
+      code: error.code,
+      message: error.message,
+    });
+    throw new Error(getFriendlyErrorMessage(error));
   }
 };
 
