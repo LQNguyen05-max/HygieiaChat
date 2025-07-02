@@ -215,7 +215,7 @@ export default function Home() {
                   </CardTitle>
                   <CardDescription>For based sigmas</CardDescription>
                   <div className="mt-6">
-                    <span className="text-5xl font-bold">$5,000.99</span>
+                    <span className="text-5xl font-bold">$19.99</span>
                     <span className="text-muted-foreground">/month</span>
                   </div>
                 </CardHeader>
