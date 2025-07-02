@@ -58,7 +58,7 @@ const features = [
   {
     title: "AI-Powered Learning",
     description:
-      "Trained on GPT-4 technology, our chatbot searches for verified health research papers to provide you with accurate answers.",
+      "Trained on GPT-4 technology, our chatbot searches for verified health research papers to provide you with complete, accurate answers.",
     icon: (
       <svg
         className="w-6 h-6 text-mint-700"
