@@ -422,7 +422,7 @@ export default function MedicalChatbot({
                 maxHeight: 300,
                 overflowY: "auto",
                 marginBottom: 16,
-                border: "1px solid #eee",
+                border: "1px solid #000",
                 padding: 8,
               }}
             >
