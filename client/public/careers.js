@@ -1,6 +1,4 @@
-import { title } from "process";
-
-export default careers = [
+const careers = [
 	{
 		title: "Software Engineer",
 		description: "Join our team to build innovative healthcare solutions.",
@@ -27,3 +25,5 @@ export default careers = [
 	},
 
 ];
+
+export default careers;

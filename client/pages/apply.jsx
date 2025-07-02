@@ -1,26 +1,40 @@
 import { useEffect, useState } from "react";
 
-const Careers = () => {
-  const [careers, setCareers] = useState(0);
+const careers4job = [
+	{
+		title: "Software Engineer",
+		description: "Join our team to build innovative healthcare solutions.",
+		location: "Remote",
+		date: "2025-10-01",
+	},
+	{
+		title: "Data Scientist",
+		description: "Analyze healthcare data to improve patient outcomes.",
+		location: "New York, NY",
+		date: "2025-10-15",
+	},
+	{
+		title: "Product Manager",
+		description: "Lead product development for our healthcare platform.",
+		location: "San Francisco, CA",
+		date: "2025-11-01",
+	},
+	{
+		title: "UX/UI Designer",
+		description: "Design user-friendly interfaces for our applications.",
+		location: "Remote",
+		date: "2025-11-15",
+	},
+
+];
+
+
+
+const Apply = () => {
+  const [careers, setCareers] = useState([]);
 
   useEffect(() => {
-    const getCareers = async () => {
-      try {
-        const data = await fetch("./util/careers.js");
-        if (!data.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const careersData = await data.json();
-        return careersData;
-      }
-      catch (error) {
-        console.error("Failed to fetch careers data:", error);
-      }
-    };
-
-    getCareers().then((careersData) => {
-      if (careersData) setCareers(careersData);
-    });
+    setCareers(careers4job);
   }, []);
 
   return (
@@ -42,5 +56,5 @@ const Careers = () => {
 
 }
 
-export default Careers;
+export default Apply;
 
