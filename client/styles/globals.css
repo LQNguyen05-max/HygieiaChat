@@ -447,7 +447,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .payment-container {
     min-height: 100vh;
-  background: #d1fae5;
+  background: #a8a8a8;
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -744,4 +744,3 @@ body::before{
 }
 
 /* parent flexbox */
-

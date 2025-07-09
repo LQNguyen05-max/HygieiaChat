@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
-import { Send, Pencil, Trash2, Paperclip, Mail } from "lucide-react";
+import { Send, Pencil, Trash2, Paperclip, Mail, User } from "lucide-react";
+import { canUseChats } from "../util/tokenUtil.js";
 
 function generateReceiptEmailHTML(chatLog) {
   return `
@@ -31,23 +32,27 @@ function generateReceiptEmailHTML(chatLog) {
   `;
 }
 
-export default function MedicalChatbot({
-  input,
-  setInput,
-  chatLog,
-  handleSend,
-  isBotTyping,
-  setChatLog,
-  editingIndex,
-  setEditingIndex,
-  deleteIndex,
-  setDeleteIndex,
-}) {
+export default function MedicalChatbot(props) {
+  const {
+    input,
+    setInput,
+    chatLog,
+    handleSend,
+    isBotTyping,
+    setChatLog,
+    editingIndex,
+    setEditingIndex,
+    deleteIndex,
+    setDeleteIndex,
+    user,
+  } = props;
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const fileInputRef = useRef(null);
   const [showFileTypeMenu, setShowFileTypeMenu] = useState(false);
   const [selectFileType, setSelectFileType] = useState(null);
+  const [tokensLeft, setTokensLeft] = useState(null);
 
   // State for showing receipt options
   const [showReceipt, setShowReceipt] = useState(false);
@@ -120,6 +125,18 @@ export default function MedicalChatbot({
     }
   };
 
+  const handleSendWithTokenCheck = async (e) => {
+    const { allowed, tokensLeft } = await canUseChats(user.uid, input);
+    setTokensLeft(tokensLeft);
+    if (!allowed) {
+      alert(
+        `You have reached your daily limit of ${tokensLeft} tokens. Please try again tomorrow.`
+      );
+      return;
+    }
+    props.handleSend(e);
+  };
+
   // Auto-scroll to the bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -154,7 +171,7 @@ export default function MedicalChatbot({
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSend(e);
+      handleSendWithTokenCheck(e);
     }
   };
 
@@ -264,9 +281,17 @@ export default function MedicalChatbot({
           <div ref={messagesEndRef} />
         </div>
       </div>
+      {tokensLeft !== null && user?.subscription !== "Pro" && (
+        <div style={{ marginBottom: 8, color: "#888" }}>
+          Tokens left today: {tokensLeft}
+        </div>
+      )}
       {/* Input Area */}
       <div className="medical-chatbot-input-area">
-        <form className="medical-chatbot-input-row" onSubmit={handleSend}>
+        <form
+          className="medical-chatbot-input-row"
+          onSubmit={handleSendWithTokenCheck}
+        >
           <textarea
             ref={inputRef}
             value={input}
