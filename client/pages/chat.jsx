@@ -3,8 +3,11 @@ import MedicalChatbot from "../components/MedicalChatbot";
 import InfoPanel from "../components/InfoPanel";
 import { Info } from "lucide-react";
 import getCustomReply from "../util/customReply";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../lib/firebase";
 
 export default function ChatPage() {
+  const [user] = useAuthState(auth);
   const [input, setInput] = useState("");
   const [chatLog, setChatLog] = useState([]);
   const [isBotTyping, setIsBotTyping] = useState(false);
@@ -106,6 +109,7 @@ export default function ChatPage() {
         </div>
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <MedicalChatbot
+            user={user}
             input={input}
             setInput={setInput}
             chatLog={chatLog}

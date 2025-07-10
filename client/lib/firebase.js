@@ -114,6 +114,8 @@ export const signUpWithEmail = async (email, password, firstName, lastName) => {
         firstName,
         lastName,
         subscription: "Free",
+        tokensUsedToday: 0,
+        lastTokenReset: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
@@ -134,7 +136,7 @@ export const signUpWithEmail = async (email, password, firstName, lastName) => {
 // Note: Firebase automatically prevents users from creating a Google account 
 // with an email that's already registered with email/password authentication.
 // When this happens, Firebase throws 'auth/account-exists-with-different-credential' error.
-export const signInWithGoogle = async () => {
+export const signUpWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
 
@@ -146,7 +148,11 @@ export const signInWithGoogle = async () => {
         email: result.user.email,
         firstName: nameParts[0],
         lastName: nameParts.slice(1).join(" "),
+        subscription: "Free",
+        tokensUsedToday: 0,
+        lastTokenReset: new Date().toISOString(),
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
     }
 
