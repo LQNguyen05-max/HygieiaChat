@@ -5,6 +5,7 @@ import { Info } from "lucide-react";
 import getCustomReply from "../util/customReply";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../lib/firebase";
+import { useEffect } from "react";
 
 export default function ChatPage() {
   const [user] = useAuthState(auth);
@@ -15,6 +16,24 @@ export default function ChatPage() {
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [isInfoPanelOpen, setIsInfoPanelOpen] = useState(false);
 
+  // Load chat log from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const storedChatLog = localStorage.getItem("medicalChatLog");
+      if (storedChatLog) {
+        setChatLog(JSON.parse(storedChatLog));
+      }
+    }
+  }, []);
+
+  // Save chat log to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("medicalChatLog", JSON.stringify(chatLog));
+    }
+  }, [chatLog]);
+
+  // Handle input change
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -94,19 +113,36 @@ export default function ChatPage() {
     }
   };
 
+  const handleClearChat = () => {
+    setChatLog([]);
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.removeItem("medicalChatLog");
+    }
+  };
+
   return (
     <div className="relative h-screen w-screen">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">HygieiaChat</h1>
-          <button
-            onClick={() => setIsInfoPanelOpen(true)}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            aria-label="Open Info Panel"
-          >
-            <Info size={24} />
-          </button>
+          <div className="flex flex-col items-end">
+            <button
+              onClick={() => setIsInfoPanelOpen(true)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Open Info Panel"
+            >
+              <Info size={24} />
+            </button>
+            <button
+              onClick={handleClearChat}
+              className="mt-2 p-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+              style={{ minWidth: 100 }}
+            >
+              Clear Chat
+            </button>
+          </div>
         </div>
+
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <MedicalChatbot
             user={user}

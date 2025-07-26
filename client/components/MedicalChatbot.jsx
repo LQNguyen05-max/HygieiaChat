@@ -282,7 +282,7 @@ export default function MedicalChatbot(props) {
         </div>
       </div>
       {tokensLeft !== null && user?.subscription !== "Pro" && (
-        <div style={{ marginBottom: 8, color: "#888" }}>
+        <div style={{ marginBottom: 8, marginLeft: 16, color: "#888" }}>
           Tokens left today: {tokensLeft}
         </div>
       )}
